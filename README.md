@@ -1,7 +1,7 @@
 Yet another MPFR C++ wrapper for High-Precision Calculations
 # Overview
 
-The mpfrxx is a C++ class designed to facilitate high-precision arithmetic operations using the MPFR library licensed under 2-clause BSD license. 
+The mpfr_cxx is a C++ class designed to facilitate high-precision arithmetic operations using the MPFR library licensed under 2-clause BSD license. 
 MPFR is a C library for multiple-precision floating-point computations with correct rounding. This class provides a convenient C++ wrapper around the MPFR library's functionalities.
 Features
     
