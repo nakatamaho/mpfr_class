@@ -54,21 +54,18 @@ class mpfr_class {
         mpfr_init2(value, mpfr_get_prec(other.value));
         mpfr_set(value, other.value, defaults::rnd);
     }
-
-    mpfr_class(mpfr_class &&other) noexcept {
-        mpfr_swap(value, other.value);
-        std::cout << "Move Assignment called A\n";
-    }
-
-    mpfr_class &operator=(mpfr_class other) noexcept {
-        mpfr_swap(value, other.value);
-        std::cout << "Move Assignment called B\n";
-        return *this;
-    }
+    // Initialization using a constructor
+    mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
 
     mpfr_class(double _d) {
         mpfr_init(value);
         mpfr_set_d(value, _d, defaults::rnd);
+    }
+
+    // Initialization using assignment operator
+    mpfr_class &operator=(mpfr_class other) noexcept {
+        mpfr_swap(value, other.value);
+        return *this;
     }
 
     mpfr_class operator+(const mpfr_class &other) const {
@@ -81,7 +78,9 @@ class mpfr_class {
         mpfr_add(value, value, other.value, defaults::rnd);
         return *this;
     }
+
     mpfr_t *get_mpfr_t() { return &value; }
+
     ~mpfr_class() { mpfr_clear(value); }
 
   private:

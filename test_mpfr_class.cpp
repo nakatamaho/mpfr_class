@@ -5,6 +5,12 @@
 
 using namespace mpfrcxx;
 
+void assertMpfrEquals(mpfrcxx::mpfr_class &mpfrObj, const char *expected) {
+    char buffer[64];
+    mpfr_sprintf(buffer, "%.10Rf", mpfrObj.get_mpfr_t());
+    assert(std::strcmp(buffer, expected) == 0);
+}
+
 void testDefaultPrecision() {
     mpfr_prec_t defaultPrec = defaults::get_default_prec();
     assert(defaultPrec == 512);
@@ -54,13 +60,16 @@ void testAssignmentOperator() {
 }
 
 void testSubstitutionDouble() {
-    double testValue = 3.14159;
-    mpfrcxx::mpfr_class a(testValue);
+    double testValue = 3.1415926535;
 
-    char buffer[64];
-    mpfr_sprintf(buffer, "%.5Rf", a.get_mpfr_t());
-    assert(std::strcmp(buffer, "3.14159") == 0);
-    std::cout << "Substitution from double test passed." << std::endl;
+    mpfrcxx::mpfr_class a(testValue);
+    assertMpfrEquals(a, "3.1415926535");
+    std::cout << "Substitution from double using constructor test passed." << std::endl;
+
+    mpfrcxx::mpfr_class b;
+    b = testValue;
+    assertMpfrEquals(b, "3.1415926535");
+    std::cout << "Substitution from double using assignment test passed." << std::endl;
 }
 int main() {
     testDefaultPrecision();
