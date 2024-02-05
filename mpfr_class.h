@@ -44,11 +44,8 @@ class defaults {
     static inline mpfr_prec_t get_default_prec() { return mpfr_get_default_prec(); }
     static void set_default_prec(mpfr_prec_t prec) { mpfr_set_default_prec(prec); }
     static inline mpfr_rnd_t get_default_rounding_mode() { return mpfr_get_default_rounding_mode(); }
-    static void set_default_rounding_mode(mpfr_rnd_t r = GMP_RNDN) { mpfr_set_default_rounding_mode(r); }
+    static void set_default_rounding_mode(mpfr_rnd_t r = MPFR_RNDN) { mpfr_set_default_rounding_mode(r); }
 };
-
-mpfr_rnd_t defaults::rnd = MPFR_RNDN;
-mpfr_prec_t defaults::prec = 512;
 
 class mpfr_class {
   public:
@@ -92,3 +89,16 @@ class mpfr_class {
     mpfr_t value;
 };
 } // namespace mpfrcxx
+
+mpfr_prec_t mpfrcxx::defaults::prec;
+mpfr_rnd_t mpfrcxx::defaults::rnd;
+
+class Initializer {
+  public:
+    Initializer() {
+        mpfrcxx::defaults::set_default_prec(512);
+        mpfrcxx::defaults::set_default_rounding_mode(MPFR_RNDN);
+    }
+};
+
+Initializer globalInitializer;
