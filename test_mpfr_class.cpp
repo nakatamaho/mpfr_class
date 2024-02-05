@@ -6,6 +6,7 @@ void testDefaultConstructor() {
     mpfr_class a;
     assert(true);
     std::cout << "Default constructor test passed." << std::endl;
+    mpfr_printf("%Re\n", a);
 }
 
 void testCopyConstructor() {
@@ -29,5 +30,15 @@ int main() {
     testAssignmentOperator();
 
     std::cout << "All tests passed." << std::endl;
+
+    mpfr_class a(1.5);
+    mpfr_class b(2.5);
+    mpfr_class result = a + b;
+
+    mpfr_printf("%Re\n", a);
+    mpfr_printf("%Re\n", b);
+    mpfr_printf("%Re\n", result);
+    //    assert(std::fabs(result.to_double() - 4.0) < 1e-6);
+
     return 0;
 }

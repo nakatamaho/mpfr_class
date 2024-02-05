@@ -37,6 +37,10 @@
 class mpfr_class {
   public:
     mpfr_class() { mpfr_init(value); }
+    mpfr_class(double _d) {
+        mpfr_init(value);
+        mpfr_set_d(value, _d, MPFR_RNDN);
+    }
 
     mpfr_class(const mpfr_class &other) {
         mpfr_init2(value, mpfr_get_prec(other.value));
@@ -51,6 +55,12 @@ class mpfr_class {
     }
 
     ~mpfr_class() { mpfr_clear(value); }
+
+    mpfr_class operator+(const mpfr_class &other) const {
+        mpfr_class result;
+        mpfr_add(result.value, value, other.value, MPFR_RNDN);
+        return result;
+    }
 
   private:
     mpfr_t value;
