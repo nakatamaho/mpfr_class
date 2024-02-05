@@ -34,6 +34,8 @@
 #include <iostream>
 #include <utility>
 
+namespace mpfrcxx {
+
 class mpfr_class {
   public:
     mpfr_class() { mpfr_init(value); }
@@ -65,3 +67,4 @@ class mpfr_class {
   private:
     mpfr_t value;
 };
+} // namespace mpfrcxx

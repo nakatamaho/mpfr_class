@@ -2,6 +2,8 @@
 #include <cassert>
 #include "mpfr_class.h"
 
+using namespace mpfrcxx;
+
 void testDefaultConstructor() {
     mpfr_class a;
     assert(true);
