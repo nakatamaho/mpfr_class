@@ -3,8 +3,8 @@ GMP_VERSION=6.3.0
 export CC=gcc-12
 export CXX=g++-12
 
-WRKDIR=/home/docker/mpfrxx/setup/work_mpfr
-ARCHIVEDIR=/home/docker/mpfrxx/archives/
+WRKDIR=/home/docker/mpfrcxx/setup/work_mpfr
+ARCHIVEDIR=/home/docker/mpfrcxx/archives/
 
 rm -rf $WRKDIR
 mkdir -p $WRKDIR
