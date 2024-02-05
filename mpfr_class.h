@@ -36,17 +36,26 @@
 
 namespace mpfrcxx {
 
-// class mpfr_class_defaults {
-//
-//
-// };
+class defaults {
+  public:
+    static mpfr_prec_t prec;
+    static mpfr_rnd_t rnd;
+
+    static inline mpfr_prec_t get_default_prec() { return mpfr_get_default_prec(); }
+    static void set_default_prec(mpfr_prec_t prec) { mpfr_set_default_prec(prec); }
+    static inline mpfr_rnd_t get_default_rounding_mode() { return mpfr_get_default_rounding_mode(); }
+    static void set_default_rounding_mode(mpfr_rnd_t r = GMP_RNDN) { mpfr_set_default_rounding_mode(r); }
+};
+
+mpfr_rnd_t defaults::rnd = MPFR_RNDN;
+mpfr_prec_t defaults::prec = 512;
 
 class mpfr_class {
   public:
     mpfr_class() { mpfr_init(value); }
     mpfr_class(double _d) {
         mpfr_init(value);
-        mpfr_set_d(value, _d, MPFR_RNDN);
+        mpfr_set_d(value, _d, defaults::rnd);
     }
 
     mpfr_class(const mpfr_class &other) {
@@ -77,6 +86,7 @@ class mpfr_class {
         mpfr_add(value, value, other.value, MPFR_RNDN);
         return *this;
     }
+    mpfr_t *get_mpfr_t() { return &value; }
 
   private:
     mpfr_t value;

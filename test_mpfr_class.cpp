@@ -4,11 +4,37 @@
 
 using namespace mpfrcxx;
 
+void testDefaultPrecision() {
+    mpfr_prec_t defaultPrec = defaults::get_default_prec();
+    assert(defaultPrec == 512);
+    std::cout << "Default precision test passed." << std::endl;
+
+    defaults::set_default_prec(1024);
+    defaultPrec = defaults::get_default_prec();
+    assert(defaultPrec == 1024);
+    std::cout << "Set and get precision test passed." << std::endl;
+
+    defaults::set_default_prec(512);
+}
+
+void testDefaultRoundingMode() {
+    mpfr_rnd_t defaultRnd = defaults::get_default_rounding_mode();
+    assert(defaultRnd == MPFR_RNDN);
+    std::cout << "Default rounding mode test passed." << std::endl;
+
+    defaults::set_default_rounding_mode(MPFR_RNDZ);
+    defaultRnd = defaults::get_default_rounding_mode();
+    assert(defaultRnd == MPFR_RNDZ);
+    std::cout << "Set and get rounding mode test passed." << std::endl;
+    defaults::set_default_rounding_mode(MPFR_RNDN);
+}
+
 void testDefaultConstructor() {
     mpfr_class a;
-    assert(true);
+    char buffer[100];
+    mpfr_snprintf(buffer, sizeof(buffer), "%.0Rf", a.get_mpfr_t());
+    assert(std::string(buffer) == "nan");
     std::cout << "Default constructor test passed." << std::endl;
-    mpfr_printf("%Re\n", a);
 }
 
 void testCopyConstructor() {
@@ -27,6 +53,8 @@ void testAssignmentOperator() {
 }
 
 int main() {
+    testDefaultPrecision();
+    testDefaultRoundingMode();
     testDefaultConstructor();
     testCopyConstructor();
     testAssignmentOperator();
