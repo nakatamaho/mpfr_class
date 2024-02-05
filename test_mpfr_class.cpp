@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cassert>
+#include <cstring>
 #include "mpfr_class.h"
 
 using namespace mpfrcxx;
@@ -52,34 +53,24 @@ void testAssignmentOperator() {
     std::cout << "Assignment operator test passed." << std::endl;
 }
 
+void testSubstitutionDouble() {
+    double testValue = 3.14159;
+    mpfrcxx::mpfr_class a(testValue);
+
+    char buffer[64];
+    mpfr_sprintf(buffer, "%.5Rf", a.get_mpfr_t());
+    assert(std::strcmp(buffer, "3.14159") == 0);
+    std::cout << "Substitution from double test passed." << std::endl;
+}
 int main() {
     testDefaultPrecision();
     testDefaultRoundingMode();
     testDefaultConstructor();
     testCopyConstructor();
     testAssignmentOperator();
+    testSubstitutionDouble();
 
     std::cout << "All tests passed." << std::endl;
-
-    mpfr_class a(1.5);
-    mpfr_class b(2.5);
-    mpfr_class result = a + b;
-    mpfr_class c;
-    c = a + b;
-
-    mpfr_printf("%Re\n", a);
-    mpfr_printf("%Re\n", b);
-    mpfr_printf("%Re\n", result);
-    mpfr_printf("%Re\n", c);
-    printf("a=a+b\n");
-    a = a + b;
-    mpfr_printf("%Re\n", a);
-
-    printf("a+=b\n");
-    a += b;
-    mpfr_printf("%Re\n", a);
-
-    //    assert(std::fabs(result.to_double() - 4.0) < 1e-6);
 
     return 0;
 }

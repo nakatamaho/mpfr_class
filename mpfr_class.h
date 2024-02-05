@@ -50,14 +50,9 @@ class defaults {
 class mpfr_class {
   public:
     mpfr_class() { mpfr_init(value); }
-    mpfr_class(double _d) {
-        mpfr_init(value);
-        mpfr_set_d(value, _d, defaults::rnd);
-    }
-
     mpfr_class(const mpfr_class &other) {
         mpfr_init2(value, mpfr_get_prec(other.value));
-        mpfr_set(value, other.value, MPFR_RNDN);
+        mpfr_set(value, other.value, defaults::rnd);
     }
 
     mpfr_class(mpfr_class &&other) noexcept {
@@ -71,19 +66,23 @@ class mpfr_class {
         return *this;
     }
 
-    ~mpfr_class() { mpfr_clear(value); }
+    mpfr_class(double _d) {
+        mpfr_init(value);
+        mpfr_set_d(value, _d, defaults::rnd);
+    }
 
     mpfr_class operator+(const mpfr_class &other) const {
         mpfr_class result;
-        mpfr_add(result.value, value, other.value, MPFR_RNDN);
+        mpfr_add(result.value, value, other.value, defaults::rnd);
         return result;
     }
 
     mpfr_class &operator+=(const mpfr_class &other) {
-        mpfr_add(value, value, other.value, MPFR_RNDN);
+        mpfr_add(value, value, other.value, defaults::rnd);
         return *this;
     }
     mpfr_t *get_mpfr_t() { return &value; }
+    ~mpfr_class() { mpfr_clear(value); }
 
   private:
     mpfr_t value;
