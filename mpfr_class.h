@@ -35,29 +35,23 @@
 #include <utility>
 
 class mpfr_class {
-public:
-  mpfr_class() {
-        mpfr_init(value);
-  }
+  public:
+    mpfr_class() { mpfr_init(value); }
 
-  mpfr_class(const mpfr_class& other) {
+    mpfr_class(const mpfr_class &other) {
         mpfr_init2(value, mpfr_get_prec(other.value));
         mpfr_set(value, other.value, MPFR_RNDN);
-  }
+    }
 
-  mpfr_class(mpfr_class&& other) noexcept {
-        mpfr_swap(value, other.value);
-  }
+    mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
 
-  mpfr_class& operator=(mpfr_class other) noexcept {
+    mpfr_class &operator=(mpfr_class other) noexcept {
         mpfr_swap(value, other.value);
         return *this;
-  }
+    }
 
-  ~mpfr_class() {
-        mpfr_clear(value);
-  }
+    ~mpfr_class() { mpfr_clear(value); }
 
-private:
+  private:
     mpfr_t value;
 };
