@@ -11,7 +11,7 @@ mkdir -p $WRKDIR
 cd $WRKDIR
 tar xvf $ARCHIVEDIR/mpfr-${VERSION}.tar.xz
 cd mpfr-${VERSION}
-./configure --with-gmp=/home/docker/mpfrxx/i/GMP-${GMP_VERSION}  --prefix=/home/docker/mpfrxx/i/MPFR-${VERSION}
+./configure --with-gmp=/home/docker/mpfrcxx/i/GMP-${GMP_VERSION}  --prefix=/home/docker/mpfrcxx/i/MPFR-${VERSION}
 make -j`nproc`
 make check
 make install

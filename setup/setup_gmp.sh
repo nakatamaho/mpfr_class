@@ -10,7 +10,7 @@ mkdir -p $WRKDIR
 cd $WRKDIR
 tar xvf $ARCHIVEDIR/gmp-${VERSION}.tar.xz
 cd gmp-${VERSION}
-./configure --enable-cxx --prefix=/home/docker/mpfrxx/i/GMP-${VERSION}
+./configure --enable-cxx --prefix=/home/docker/mpfrcxx/i/GMP-${VERSION}
 make -j`nproc`
 make install
 
