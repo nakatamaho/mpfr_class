@@ -60,26 +60,32 @@ class mpfr_class {
     // Initialization using a constructor
     mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
 
+    mpfr_class(double d) noexcept {
+        mpfr_init(value);
+        mpfr_set_d(value, d, defaults::rnd);
+    }
     mpfr_class(const char *str, int base = defaults::base, mpfr_rnd_t rnd = defaults::rnd) {
         mpfr_init(value);
         if (mpfr_set_str(value, str, base, rnd) != 0) {
             std::cerr << "Error initializing mpfr_t from string: " << str << std::endl;
         }
     }
-    mpfr_class(double d) {
-        mpfr_init(value);
-        mpfr_set_d(value, d, defaults::rnd);
-    }
-
     // Initialization using assignment operator
     mpfr_class &operator=(mpfr_class other) noexcept {
         mpfr_swap(value, other.value);
         return *this;
     }
-    mpfr_class &operator=(double d) {
+    mpfr_class &operator=(double d) noexcept {
         mpfr_set_d(value, d, defaults::rnd);
         return *this;
     }
+    mpfr_class &operator=(const char *str) {
+        if (mpfr_set_str(value, str, 10, MPFR_RNDN) != 0) {
+            std::cerr << "Error assigning mpfr_t from string." << std::endl;
+        }
+        return *this;
+    }
+
     mpfr_class operator+(const mpfr_class &other) const {
         mpfr_class result;
         mpfr_add(result.value, value, other.value, defaults::rnd);
