@@ -71,6 +71,7 @@ void testSubstitutionDouble() {
     assertMpfrEquals(b, "3.1415926535");
     std::cout << "Substitution from double using assignment test passed." << std::endl;
 }
+
 int main() {
     testDefaultPrecision();
     testDefaultRoundingMode();

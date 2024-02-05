@@ -40,11 +40,14 @@ class defaults {
   public:
     static mpfr_prec_t prec;
     static mpfr_rnd_t rnd;
+    static int base;
 
     static inline mpfr_prec_t get_default_prec() { return mpfr_get_default_prec(); }
     static void set_default_prec(mpfr_prec_t prec) { mpfr_set_default_prec(prec); }
     static inline mpfr_rnd_t get_default_rounding_mode() { return mpfr_get_default_rounding_mode(); }
     static void set_default_rounding_mode(mpfr_rnd_t r = MPFR_RNDN) { mpfr_set_default_rounding_mode(r); }
+    static inline mpfr_prec_t get_default_base() { return base; }
+    static void set_default_base(int _base) { base = _base; }
 };
 
 class mpfr_class {
@@ -57,9 +60,15 @@ class mpfr_class {
     // Initialization using a constructor
     mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
 
-    mpfr_class(double _d) {
+    mpfr_class(const char *str, int base = defaults::base, mpfr_rnd_t rnd = defaults::rnd) {
         mpfr_init(value);
-        mpfr_set_d(value, _d, defaults::rnd);
+        if (mpfr_set_str(value, str, base, rnd) != 0) {
+            std::cerr << "Error initializing mpfr_t from string: " << str << std::endl;
+        }
+    }
+    mpfr_class(double d) {
+        mpfr_init(value);
+        mpfr_set_d(value, d, defaults::rnd);
     }
 
     // Initialization using assignment operator
@@ -67,7 +76,10 @@ class mpfr_class {
         mpfr_swap(value, other.value);
         return *this;
     }
-
+    mpfr_class &operator=(double d) {
+        mpfr_set_d(value, d, defaults::rnd);
+        return *this;
+    }
     mpfr_class operator+(const mpfr_class &other) const {
         mpfr_class result;
         mpfr_add(result.value, value, other.value, defaults::rnd);
@@ -90,12 +102,14 @@ class mpfr_class {
 
 mpfr_prec_t mpfrcxx::defaults::prec;
 mpfr_rnd_t mpfrcxx::defaults::rnd;
+int mpfrcxx::defaults::base;
 
 class Initializer {
   public:
     Initializer() {
         mpfrcxx::defaults::set_default_prec(512);
         mpfrcxx::defaults::set_default_rounding_mode(MPFR_RNDN);
+        mpfrcxx::defaults::set_default_base(10);
     }
 };
 
