@@ -36,10 +36,21 @@ int main() {
     mpfr_class a(1.5);
     mpfr_class b(2.5);
     mpfr_class result = a + b;
+    mpfr_class c;
+    c = a + b;
 
     mpfr_printf("%Re\n", a);
     mpfr_printf("%Re\n", b);
     mpfr_printf("%Re\n", result);
+    mpfr_printf("%Re\n", c);
+    printf("a=a+b\n");
+    a = a + b;
+    mpfr_printf("%Re\n", a);
+
+    printf("a+=b\n");
+    a += b;
+    mpfr_printf("%Re\n", a);
+
     //    assert(std::fabs(result.to_double() - 4.0) < 1e-6);
 
     return 0;

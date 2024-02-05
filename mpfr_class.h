@@ -36,6 +36,11 @@
 
 namespace mpfrcxx {
 
+// class mpfr_class_defaults {
+//
+//
+// };
+
 class mpfr_class {
   public:
     mpfr_class() { mpfr_init(value); }
@@ -49,10 +54,14 @@ class mpfr_class {
         mpfr_set(value, other.value, MPFR_RNDN);
     }
 
-    mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
+    mpfr_class(mpfr_class &&other) noexcept {
+        mpfr_swap(value, other.value);
+        std::cout << "Move Assignment called A\n";
+    }
 
     mpfr_class &operator=(mpfr_class other) noexcept {
         mpfr_swap(value, other.value);
+        std::cout << "Move Assignment called B\n";
         return *this;
     }
 
@@ -62,6 +71,11 @@ class mpfr_class {
         mpfr_class result;
         mpfr_add(result.value, value, other.value, MPFR_RNDN);
         return result;
+    }
+
+    mpfr_class &operator+=(const mpfr_class &other) {
+        mpfr_add(value, value, other.value, MPFR_RNDN);
+        return *this;
     }
 
   private:
