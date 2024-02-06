@@ -6,6 +6,7 @@ INCLUDES = -I/home/docker/mpfrcxx/i/GMP-6.3.0/include -I/home/docker/mpfrcxx/i/M
 TARGET = test_mpfr_class
 
 SOURCES = test_mpfr_class.cpp
+HEADERS = mpfr_class.h
 OBJECTS = $(SOURCES:.cpp=.o)
 
 all: $(TARGET)
@@ -13,8 +14,8 @@ all: $(TARGET)
 $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $(TARGET) $(OBJECTS) $(LDFLAGS)
 
-.cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $<
+$(OBJECTS): $(SOURCES) $(HEADERS)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $(@:.o=.cpp)
 
 clean:
 	rm -f $(TARGET) $(OBJECTS) *~

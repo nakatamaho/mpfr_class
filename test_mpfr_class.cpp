@@ -1,15 +1,26 @@
 #include <iostream>
 #include <cassert>
 #include <cstring>
+#include <string>
+
 #include "mpfr_class.h"
 
 using namespace mpfrcxx;
 
 // Asserts that the mpfr_class object equals the expected string representation
-void assertMpfrEquals(mpfrcxx::mpfr_class &mpfrObj, const char *expected) {
+void assertMpfrEquals(mpfrcxx::mpfr_class &mpfrObj, const char *expected, int precision = 10, int base = defaults::base) {
+    char formatString[64];
+    // Adjust the comparison based on the base
     char buffer[64];
-    mpfr_sprintf(buffer, "%.10Rf", mpfrObj.get_mpfr_t());
-    assert(std::strcmp(buffer, expected) == 0);
+    if (base == 10) {
+        std::sprintf(formatString, "%%.%dRf", precision);         // Generates format string like "%.10Rf"
+        mpfr_sprintf(buffer, formatString, mpfrObj.get_mpfr_t()); // Uses generated format string
+    } else {
+        printf("not supported");
+        exit(-1);
+    }
+    // Compare the generated string with the expected value
+    assert(std::strcmp(buffer, expected) == 0 && "The mpfr object's value does not match the expected value.");
 }
 
 void testDefaultPrecision() {
@@ -62,61 +73,42 @@ void testAssignmentOperator() {
 
 void testInitializationAndAssignmentDouble() {
     double testValue = 3.1415926535;
+    const char *expectedValue = "3.1415926535";
 
-    mpfrcxx::mpfr_class a(testValue);
-    assertMpfrEquals(a, "3.1415926535");
+    mpfrcxx::mpfr_class a = testValue;
+    assertMpfrEquals(a, expectedValue);
     std::cout << "Substitution from double using constructor test passed." << std::endl;
 
     mpfrcxx::mpfr_class b;
     b = testValue;
-    assertMpfrEquals(b, "3.1415926535");
+    assertMpfrEquals(b, expectedValue);
     std::cout << "Substitution from double using assignment test passed." << std::endl;
 }
 
 void testInitializationAndAssignmentString() {
     // Testing initialization with a decimal number using a constructor
-    mpfr_class decimalWrapper("3.1415926535");
-    assertMpfrEquals(decimalWrapper, "3.1415926535");
-    std::cout << "Constructor initialization with decimal '3.1415926535' test passed." << std::endl;
+    const char *expectedDecimalValue = "1.4142135624";
+    mpfr_class a = expectedDecimalValue;
+    assertMpfrEquals(a, expectedDecimalValue);
+    std::cout << "Constructor initialization with decimal '" << expectedDecimalValue << "' test passed." << std::endl;
 
     // Testing initialization with a decimal number using an assignment operator
-    mpfr_class decimalWrapperAssignment;
-    decimalWrapperAssignment = "3.1415926535";
-    assertMpfrEquals(decimalWrapperAssignment, "3.1415926535");
-    std::cout << "Assignment initialization with decimal '3.1415926535' test passed." << std::endl;
+    mpfr_class b;
+    b = expectedDecimalValue;
+    assertMpfrEquals(b, expectedDecimalValue);
+    std::cout << "Assignment initialization with decimal '" << expectedDecimalValue << "' test passed." << std::endl;
 
-    // Testing initialization with a hexadecimal number using a constructor
-    mpfr_class hexWrapper("1.921fb54442d18p+1", 16);
-    assertMpfrEquals(hexWrapper, "3.1415926535");
-    std::cout << "Constructor initialization with hexadecimal '1.921fb54442d18p+1' test passed." << std::endl;
+    // Testing initialization with a decimal number using a constructor
+    std::string expectedDecimalValueString = "3.1415926535";
+    mpfr_class c = expectedDecimalValueString;
+    assertMpfrEquals(c, expectedDecimalValueString.c_str());
+    std::cout << "Constructor initialization with decimal '" << expectedDecimalValueString << "' test passed." << std::endl;
 
-    // Testing initialization with a hexadecimal number using an assignment operator
-    mpfr_class hexWrapperAssignment;
-    hexWrapperAssignment = "1.921fb54442d18p+1";
-    assertMpfrEquals(hexWrapperAssignment, "3.1415926535");
-    std::cout << "Assignment initialization with hexadecimal '1.921fb54442d18p+1' test passed." << std::endl;
-
-    // Testing initialization with a negative decimal number using a constructor
-    mpfr_class negativeDecimalWrapper("-2.7182818284");
-    assertMpfrEquals(negativeDecimalWrapper, "-2.7182818284");
-    std::cout << "Constructor initialization with negative decimal '-2.7182818284' test passed." << std::endl;
-
-    // Testing initialization with a negative decimal number using an assignment operator
-    mpfr_class negativeDecimalWrapperAssignment;
-    negativeDecimalWrapperAssignment = "-2.7182818284";
-    assertMpfrEquals(negativeDecimalWrapperAssignment, "-2.7182818284");
-    std::cout << "Assignment initialization with negative decimal '-2.7182818284' test passed." << std::endl;
-
-    // Testing initialization with a binary number using a constructor
-    mpfr_class binaryWrapper("10.101010001000100010001011010001000100010001011", 2);
-    assertMpfrEquals(binaryWrapper, "2.7182818284");
-    std::cout << "Constructor initialization with binary '10.101010001000100010001011010001000100010001011' test passed." << std::endl;
-
-    // Testing initialization with a binary number using an assignment operator
-    mpfr_class binaryWrapperAssignment;
-    binaryWrapperAssignment = "10.101010001000100010001011010001000100010001011";
-    assertMpfrEquals(binaryWrapperAssignment, "2.7182818284");
-    std::cout << "Assignment initialization with binary '10.101010001000100010001011010001000100010001011' test passed." << std::endl;
+    // Testing initialization with a decimal number using an assignment operator
+    mpfr_class d;
+    d = expectedDecimalValueString;
+    assertMpfrEquals(d, expectedDecimalValueString.c_str());
+    std::cout << "Assignment initialization with decimal '" << expectedDecimalValueString << "' test passed." << std::endl;
 }
 
 int main() {

@@ -59,7 +59,6 @@ class mpfr_class {
     }
     // Initialization using a constructor
     mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
-
     mpfr_class(double d) noexcept {
         mpfr_init(value);
         mpfr_set_d(value, d, defaults::rnd);
@@ -67,9 +66,18 @@ class mpfr_class {
     mpfr_class(const char *str, int base = defaults::base, mpfr_rnd_t rnd = defaults::rnd) {
         mpfr_init(value);
         if (mpfr_set_str(value, str, base, rnd) != 0) {
-            std::cerr << "Error initializing mpfr_t from string: " << str << std::endl;
+            std::cerr << "Error initializing mpfr_t from const char*: " << str << std::endl;
+            throw std::runtime_error("Failed to initialize mpfr_t with given string.");
         }
     }
+    mpfr_class(const std::string &str, int base = defaults::base, mpfr_rnd_t rnd = defaults::rnd) {
+        mpfr_init(value);
+        if (mpfr_set_str(value, str.c_str(), base, rnd) != 0) {
+            std::cerr << "Error initializing mpfr_t from std::string: " << str << std::endl;
+            throw std::runtime_error("Failed to initialize mpfr_t with given string.");
+        }
+    }
+
     // Initialization using assignment operator
     mpfr_class &operator=(mpfr_class other) noexcept {
         mpfr_swap(value, other.value);
@@ -80,12 +88,21 @@ class mpfr_class {
         return *this;
     }
     mpfr_class &operator=(const char *str) {
-        if (mpfr_set_str(value, str, 10, MPFR_RNDN) != 0) {
-            std::cerr << "Error assigning mpfr_t from string." << std::endl;
+        if (mpfr_set_str(value, str, defaults::base, defaults::rnd) != 0) {
+            std::cerr << "Error assigning mpfr_t from char:" << std::endl;
+            throw std::runtime_error("Failed to initialize mpfr_t with given string.");
+        }
+        return *this;
+    }
+    mpfr_class &operator=(const std::string &str) {
+        if (mpfr_set_str(value, str.c_str(), defaults::base, defaults::rnd) != 0) {
+            std::cerr << "Error assigning mpfr_t from string: " << str << std::endl;
+            throw std::runtime_error("Failed to initialize mpfr_t with given string.");
         }
         return *this;
     }
 
+    // addition
     mpfr_class operator+(const mpfr_class &other) const {
         mpfr_class result;
         mpfr_add(result.value, value, other.value, defaults::rnd);
@@ -104,6 +121,7 @@ class mpfr_class {
   private:
     mpfr_t value;
 };
+
 } // namespace mpfrcxx
 
 mpfr_prec_t mpfrcxx::defaults::prec;
