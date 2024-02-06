@@ -44,6 +44,7 @@ This project is licensed under the 2-clause BSD License.
 
 # ChatGPT4
 
-* https://chat.openai.com/c/46a93858-ea63-462f-b392-b9ed3a717454
-* https://chat.openai.com/c/268fe353-3a3f-44ea-8519-987b674d7d12
 * https://chat.openai.com/c/e88b85d9-dbca-4bdc-bfb3-52cff97ddae4
+* https://chat.openai.com/c/268fe353-3a3f-44ea-8519-987b674d7d12
+* https://chat.openai.com/c/46a93858-ea63-462f-b392-b9ed3a717454
+* https://chat.openai.com/c/e472fda8-1397-44de-bef5-09acb143dbcf
