@@ -8,14 +8,22 @@
 using namespace mpfrcxx;
 
 // Asserts that the mpfr_class object equals the expected string representation
-void assertMpfrEquals(mpfrcxx::mpfr_class &mpfrObj, const char *expected, int precision = 10, int base = defaults::base) {
+void assertMpfrEquals(mpfrcxx::mpfr_class &mpfrObj, const char *expected, int base = defaults::base, int precision = 10) {
     char formatString[64];
     // Adjust the comparison based on the base
     char buffer[64];
-    if (base == 10) {
+    switch (base) {
+    case 10:
         std::sprintf(formatString, "%%.%dRf", precision);         // Generates format string like "%.10Rf"
         mpfr_sprintf(buffer, formatString, mpfrObj.get_mpfr_t()); // Uses generated format string
-    } else {
+        break;
+
+    case 16:
+        std::sprintf(formatString, "%%.%dRa", precision);         // Generates format string like "%.10Rf"
+        mpfr_sprintf(buffer, formatString, mpfrObj.get_mpfr_t()); // Uses generated format string
+        break;
+
+    default:
         printf("not supported");
         exit(-1);
     }
@@ -109,6 +117,20 @@ void testInitializationAndAssignmentString() {
     d = expectedDecimalValueString;
     assertMpfrEquals(d, expectedDecimalValueString.c_str());
     std::cout << "Assignment initialization with decimal '" << expectedDecimalValueString << "' test passed." << std::endl;
+
+    // Testing initialization with a hexadecimal number using an assignment operator
+    const char *expectedHexValue = "0x3.243f6a8885a3p+0";
+    mpfr_class e(expectedHexValue, 16);
+    assertMpfrEquals(e, expectedHexValue, 16, 12);
+    std::cout << "Assignment initialization with hexadecimal '" << expectedHexValue << "' test passed." << std::endl;
+
+    defaults::base = 16;
+    // Testing initialization with a hexadecimal number using a constructor
+    mpfr_class f;
+    e = expectedHexValue;
+    assertMpfrEquals(e, expectedHexValue, defaults::base, 12);
+    std::cout << "Constructor initialization with hexadecimal '" << expectedHexValue << "' test passed." << std::endl;
+    defaults::base = 10;
 }
 
 int main() {
