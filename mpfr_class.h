@@ -137,6 +137,25 @@ class mpfr_class {
         mpfr_mul(value, value, rhs.value, defaults::rnd);
         return *this;
     }
+    mpfr_class operator-(const mpfr_class &rhs) const {
+        mpfr_class result;
+        mpfr_sub(result.value, this->value, rhs.value, defaults::rnd);
+        return result;
+    }
+    mpfr_class &operator-=(const mpfr_class &rhs) {
+        mpfr_sub(value, value, rhs.value, defaults::rnd);
+        return *this;
+    }
+    mpfr_class operator/(const mpfr_class &rhs) const {
+        mpfr_class result;
+        mpfr_div(result.value, this->value, rhs.value, defaults::rnd);
+        return result;
+    }
+    mpfr_class &operator/=(const mpfr_class &rhs) {
+        mpfr_div(value, value, rhs.value, defaults::rnd);
+        return *this;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////
     // Algebraic and transcendental functions
     ////////////////////////////////////////////////////////////////////////////////////////
