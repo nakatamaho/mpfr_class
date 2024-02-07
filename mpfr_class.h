@@ -124,7 +124,6 @@ class mpfr_class {
         mpfr_add(result.value, value, other.value, defaults::rnd);
         return result;
     }
-
     mpfr_class &operator+=(const mpfr_class &other) {
         mpfr_add(value, value, other.value, defaults::rnd);
         return *this;

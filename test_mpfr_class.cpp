@@ -277,6 +277,18 @@ void testLog2() {
     std::cout << "Log2 test passed." << std::endl;
 }
 
+void testAddition() {
+    mpfr_class a(1.5);
+    mpfr_class b(2.5);
+    std::string expected = "4.0000000000";
+
+    mpfr_class c = a + b;
+    assertMpfrEquals(c, expected.c_str());
+    a += b;
+    assertMpfrEquals(a, expected.c_str());
+    std::cout << "Addition Test passed." << std::endl;
+}
+
 int main() {
     testDefaultPrecision();
     testDefaultRoundingMode();
@@ -292,6 +304,7 @@ int main() {
     testLog();
     testLog10();
     testLog2();
+    testAddition();
 
     std::cout << "All tests passed." << std::endl;
 
