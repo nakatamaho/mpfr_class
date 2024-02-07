@@ -13,6 +13,10 @@ void assertMpfrEquals(mpfrcxx::mpfr_class &mpfrObj, const char *expected, int ba
     // Adjust the comparison based on the base
     char buffer[64];
     switch (base) {
+    case 2:
+        std::sprintf(formatString, "%%.%dRb", precision);         // Generates format string like "%.10Rf"
+        mpfr_sprintf(buffer, formatString, mpfrObj.get_mpfr_t()); // Uses generated format string
+        break;
     case 10:
         std::sprintf(formatString, "%%.%dRf", precision);         // Generates format string like "%.10Rf"
         mpfr_sprintf(buffer, formatString, mpfrObj.get_mpfr_t()); // Uses generated format string
@@ -131,6 +135,20 @@ void testInitializationAndAssignmentString() {
     assertMpfrEquals(e, expectedHexValue, defaults::base, 12);
     std::cout << "Constructor initialization with hexadecimal '" << expectedHexValue << "' test passed." << std::endl;
     defaults::base = 10;
+
+    // Testing initialization with a hexadecimal number using an assignment operator
+    const char *expectedBinaryValue = "1.0101010001000100010001011010001000100010001011p+1";
+    mpfr_class g(expectedBinaryValue, 2);
+    assertMpfrEquals(g, expectedBinaryValue, 2, 46);
+    std::cout << "Assignment initialization with binary '" << expectedBinaryValue << "' test passed." << std::endl;
+
+    defaults::base = 2;
+    // Testing initialization with a binaryadecimal number using a constructor
+    mpfr_class h;
+    h = expectedBinaryValue;
+    assertMpfrEquals(h, expectedBinaryValue, defaults::base, 46);
+    std::cout << "Constructor initialization with binary '" << expectedBinaryValue << "' test passed." << std::endl;
+    defaults::base = 10;
 }
 
 // Function to test equality of two mpfr_class instances with the same value
@@ -220,6 +238,11 @@ void testLog2() {
     mpfr_class result = mpfr_class::log2(a);
     // log2(2) = 1
     std::string expected = "1.0000000000";
+    assertMpfrEquals(result, expected.c_str());
+    // log2(10) = 3.3219280949
+    a = "10.0";
+    expected = "3.3219280949";
+    result = mpfr_class::log2(a);
     assertMpfrEquals(result, expected.c_str());
     std::cout << "Log2 test passed." << std::endl;
 }
