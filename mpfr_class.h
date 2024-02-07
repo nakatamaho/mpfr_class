@@ -58,6 +58,7 @@ class mpfr_class {
         mpfr_set(value, other.value, defaults::rnd);
     }
     // Initialization using a constructor
+    // move constructor
     mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
     mpfr_class(double d) noexcept {
         mpfr_init(value);
@@ -79,6 +80,7 @@ class mpfr_class {
     }
 
     // Initialization using assignment operator
+    // Copy-and-Swap Idiom; it does both the copy assignment operator and the move assignment operator.
     mpfr_class &operator=(mpfr_class other) noexcept {
         mpfr_swap(value, other.value);
         return *this;
@@ -102,7 +104,9 @@ class mpfr_class {
         return *this;
     }
 
-    // addition
+    friend inline bool operator==(const mpfr_class &lhs, const mpfr_class &rhs) { return mpfr_cmp(lhs.value, rhs.value) == 0; }
+
+    // Addition
     mpfr_class operator+(const mpfr_class &other) const {
         mpfr_class result;
         mpfr_add(result.value, value, other.value, defaults::rnd);
@@ -113,6 +117,39 @@ class mpfr_class {
         mpfr_add(value, value, other.value, defaults::rnd);
         return *this;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    static mpfr_class sqrt(const mpfr_class &a) {
+        mpfr_class result;
+        if (mpfr_sqrt(result.value, a.value, defaults::rnd)) {
+            throw std::runtime_error("Error computing square root.");
+        }
+        return result;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////
+    static mpfr_class log(const mpfr_class &a) {
+        mpfr_class result;
+        if (mpfr_log(result.value, a.value, defaults::rnd)) {
+            throw std::runtime_error("Error computing log.");
+        }
+        return result;
+    }
+    static mpfr_class log10(const mpfr_class &a) {
+        mpfr_class result;
+        if (mpfr_log10(result.value, a.value, defaults::rnd)) {
+            throw std::runtime_error("Error computing log10.");
+        }
+        return result;
+    }
+    static mpfr_class log2(const mpfr_class &a) {
+        mpfr_class result;
+        if (mpfr_log2(result.value, a.value, defaults::rnd)) {
+            throw std::runtime_error("Error computing log2.");
+        }
+        return result;
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////
+    bool is_nan() const { return mpfr_nan_p(value) != 0; }
 
     mpfr_t *get_mpfr_t() { return &value; }
 

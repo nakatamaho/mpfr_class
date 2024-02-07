@@ -133,6 +133,45 @@ void testInitializationAndAssignmentString() {
     defaults::base = 10;
 }
 
+// Function to test equality of two mpfr_class instances with the same value
+void testEqualitySameValue() {
+    mpfr_class a, b;
+    a = "3.14";     // Set value of a
+    b = "3.14";     // Set value of b to the same as a
+    assert(a == b); // Should be true
+    std::cout << "Test equality with the same value passed." << std::endl;
+}
+
+// Function to test equality of two mpfr_class instances with different values
+void testEqualityDifferentValue() {
+    mpfr_class a, c;
+    a = "3.14";        // Set value of a
+    c = "2.17";        // Set value of c to a different value
+    assert(!(a == c)); // Should be false
+    std::cout << "Test equality with different values passed." << std::endl;
+}
+
+void testSqrt() {
+    // Test Case 1: Calculate the square root of a positive number
+    mpfr_class a;
+    a = "4.0"; // Square root of 4.0 is 2.0
+    mpfr_class result = mpfr_class::sqrt(a);
+    std::string expected = "2.0000000000";
+    assertMpfrEquals(result, expected.c_str());
+
+    // Test Case 2: Calculate the square root of 0
+    mpfr_class b("0.0"); // Square root of 0.0 is 0.0
+    result = mpfr_class::sqrt(b);
+    expected = "0.0000000000";
+    assertMpfrEquals(result, expected.c_str());
+
+    // Test Case 3: Calculate the square root of a negative number (should raise an error)
+    mpfr_class c("-1.0");
+    result = mpfr_class::sqrt(c);
+    assert(result.is_nan()); // Check if the result is NaN
+    std::cout << "Test square root of a negative number (should be NaN) passed." << std::endl;
+}
+
 int main() {
     testDefaultPrecision();
     testDefaultRoundingMode();
@@ -141,6 +180,9 @@ int main() {
     testAssignmentOperator();
     testInitializationAndAssignmentDouble();
     testInitializationAndAssignmentString();
+    testEqualitySameValue();
+    testEqualityDifferentValue();
+    testSqrt();
 
     std::cout << "All tests passed." << std::endl;
 
