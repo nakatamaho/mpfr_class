@@ -119,16 +119,24 @@ class mpfr_class {
     ////////////////////////////////////////////////////////////////////////////////////////
     // arithmetic
     ////////////////////////////////////////////////////////////////////////////////////////
-    mpfr_class operator+(const mpfr_class &other) const {
+    mpfr_class operator+(const mpfr_class &rhs) const {
         mpfr_class result;
-        mpfr_add(result.value, value, other.value, defaults::rnd);
+        mpfr_add(result.value, value, rhs.value, defaults::rnd);
         return result;
     }
-    mpfr_class &operator+=(const mpfr_class &other) {
-        mpfr_add(value, value, other.value, defaults::rnd);
+    mpfr_class &operator+=(const mpfr_class &rhs) {
+        mpfr_add(value, value, rhs.value, defaults::rnd);
         return *this;
     }
-
+    mpfr_class operator*(const mpfr_class &rhs) const {
+        mpfr_class result;
+        mpfr_mul(result.value, this->value, rhs.value, defaults::rnd);
+        return result;
+    }
+    mpfr_class &operator*=(const mpfr_class &rhs) {
+        mpfr_mul(value, value, rhs.value, defaults::rnd);
+        return *this;
+    }
     ////////////////////////////////////////////////////////////////////////////////////////
     // Algebraic and transcendental functions
     ////////////////////////////////////////////////////////////////////////////////////////
