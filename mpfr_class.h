@@ -155,22 +155,22 @@ class mpfr_class {
         mpfr_div(value, value, rhs.value, defaults::rnd);
         return *this;
     }
-    ////////////////////////////////////////////////////////////////////////////////////////
-    // Algebraic and transcendental functions
-    ////////////////////////////////////////////////////////////////////////////////////////
     static mpfr_class sqrt(const mpfr_class &a) {
         mpfr_class result;
         mpfr_sqrt(result.value, a.value, defaults::rnd);
         return result;
     }
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // transcendental functions
+    ////////////////////////////////////////////////////////////////////////////////////////
     static mpfr_class log(const mpfr_class &a) {
         mpfr_class result;
         mpfr_log(result.value, a.value, defaults::rnd);
         return result;
     }
-    static mpfr_class log10(const mpfr_class &a) {
+    static mpfr_class log_ui(unsigned long int op) {
         mpfr_class result;
-        mpfr_log10(result.value, a.value, defaults::rnd);
+        mpfr_log_ui(result.value, op, defaults::rnd);
         return result;
     }
     static mpfr_class log2(const mpfr_class &a) {
@@ -178,6 +178,57 @@ class mpfr_class {
         mpfr_log2(result.value, a.value, defaults::rnd);
         return result;
     }
+    static mpfr_class log10(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_log10(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class log1p(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_log1p(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class log2p1(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_log2p1(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class log10p1(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_log10p1(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class exp(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_exp(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class exp2(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_exp2(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class exp10(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_exp10(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class expm1(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_expm1(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class exp2m1(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_exp2m1(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class exp10m1(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_exp10m1(result.value, a.value, defaults::rnd);
+        return result;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////
     bool is_nan() const { return mpfr_nan_p(value) != 0; }
     bool is_inf() const { return mpfr_inf_p(value) != 0; }
