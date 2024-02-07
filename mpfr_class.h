@@ -228,7 +228,348 @@ class mpfr_class {
         mpfr_exp10m1(result.value, a.value, defaults::rnd);
         return result;
     }
-
+    static mpfr_class pow(const mpfr_class &base, const mpfr_class &exponent) {
+        mpfr_class result;
+        mpfr_pow(result.value, base.value, exponent.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class powr(const mpfr_class &base, const mpfr_class &exponent) {
+        mpfr_class result;
+        mpfr_powr(result.value, base.value, exponent.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class pow_ui(const mpfr_class &base, unsigned long int exponent) {
+        mpfr_class result;
+        mpfr_pow_ui(result.value, base.value, exponent, defaults::rnd);
+        return result;
+    }
+    static mpfr_class pow_si(const mpfr_class &base, long int exponent) {
+        mpfr_class result;
+        mpfr_pow_si(result.value, base.value, exponent, defaults::rnd);
+        return result;
+    }
+    static mpfr_class pow_uj(const mpfr_class &base, uintmax_t exponent) {
+        mpfr_class result;
+        mpfr_pow_uj(result.value, base.value, exponent, defaults::rnd);
+        return result;
+    }
+    static mpfr_class pow_sj(const mpfr_class &base, intmax_t exponent) {
+        mpfr_class result;
+        mpfr_pow_sj(result.value, base.value, exponent, defaults::rnd);
+        return result;
+    }
+    static mpfr_class pown(const mpfr_class &base, intmax_t exponent) {
+        mpfr_class result;
+        mpfr_pown(result.value, base.value, exponent, defaults::rnd);
+        return result;
+    }
+    static mpfr_class pow_z(const mpfr_class &base, const mpz_t exponent) {
+        mpfr_class result;
+        mpfr_pow_z(result.value, base.value, exponent, defaults::rnd);
+        return result;
+    }
+    static mpfr_class ui_pow_ui(unsigned long int base, unsigned long int exponent) {
+        mpfr_class result;
+        mpfr_ui_pow_ui(result.value, base, exponent, defaults::rnd);
+        return result;
+    }
+    static mpfr_class ui_pow(unsigned long int base, const mpfr_class &exponent) {
+        mpfr_class result;
+        mpfr_ui_pow(result.value, base, exponent.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class compound_si(const mpfr_class &base, long int n) {
+        mpfr_class result;
+        mpfr_compound_si(result.value, base.value, n, defaults::rnd);
+        return result;
+    }
+    static mpfr_class cos(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_cos(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class sin(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_sin(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class tan(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_tan(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class cosu(const mpfr_class &a, unsigned long int u) {
+        mpfr_class result;
+        mpfr_cosu(result.value, a.value, u, defaults::rnd);
+        return result;
+    }
+    static mpfr_class sinu(const mpfr_class &a, unsigned long int u) {
+        mpfr_class result;
+        mpfr_sinu(result.value, a.value, u, defaults::rnd);
+        return result;
+    }
+    static mpfr_class tanu(const mpfr_class &a, unsigned long int u) {
+        mpfr_class result;
+        mpfr_tanu(result.value, a.value, u, defaults::rnd);
+        return result;
+    }
+    static mpfr_class cospi(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_cospi(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class sinpi(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_sinpi(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class tanpi(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_tanpi(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static void sin_cos(mpfr_class &sin_result, mpfr_class &cos_result, const mpfr_class &a) { mpfr_sin_cos(sin_result.value, cos_result.value, a.value, defaults::rnd); }
+    static mpfr_class sec(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_sec(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class csc(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_csc(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class cot(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_cot(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class acos(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_acos(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class asin(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_asin(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class atan(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_atan(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class acosu(const mpfr_class &a, unsigned long int u) {
+        mpfr_class result;
+        mpfr_acosu(result.value, a.value, u, defaults::rnd);
+        return result;
+    }
+    static mpfr_class asinu(const mpfr_class &a, unsigned long int u) {
+        mpfr_class result;
+        mpfr_asinu(result.value, a.value, u, defaults::rnd);
+        return result;
+    }
+    static mpfr_class atanu(const mpfr_class &a, unsigned long int u) {
+        mpfr_class result;
+        mpfr_atanu(result.value, a.value, u, defaults::rnd);
+        return result;
+    }
+    static mpfr_class acospi(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_acospi(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class asinpi(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_asinpi(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class atanpi(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_atanpi(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class atan2(const mpfr_class &y, const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_atan2(result.value, y.value, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class atan2u(const mpfr_class &y, const mpfr_class &x, unsigned long int u) {
+        mpfr_class result;
+        mpfr_atan2u(result.value, y.value, x.value, u, defaults::rnd);
+        return result;
+    }
+    static mpfr_class atan2pi(const mpfr_class &y, const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_atan2pi(result.value, y.value, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class cosh(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_cosh(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class sinh(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_sinh(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class tanh(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_tanh(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static void sinh_cosh(mpfr_class &sinh_result, mpfr_class &cosh_result, const mpfr_class &a) { mpfr_sinh_cosh(sinh_result.value, cosh_result.value, a.value, defaults::rnd); }
+    static mpfr_class sech(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_sech(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class csch(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_csch(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class coth(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_coth(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class acosh(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_acosh(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class asinh(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_asinh(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class atanh(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_atanh(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class eint(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_eint(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class li2(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_li2(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class gamma(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_gamma(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class gamma_inc(const mpfr_class &a, const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_gamma_inc(result.value, a.value, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class lngamma(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_lngamma(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class lgamma(const mpfr_class &a, int &signp) {
+        mpfr_class result;
+        mpfr_lgamma(result.value, &signp, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class digamma(const mpfr_class &a) {
+        mpfr_class result;
+        mpfr_digamma(result.value, a.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class beta(const mpfr_class &x, const mpfr_class &y) {
+        mpfr_class result;
+        mpfr_beta(result.value, x.value, y.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class zeta(const mpfr_class &s) {
+        mpfr_class result;
+        mpfr_zeta(result.value, s.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class zeta_ui(unsigned long int s) {
+        mpfr_class result;
+        mpfr_zeta_ui(result.value, s, defaults::rnd);
+        return result;
+    }
+    static mpfr_class erf(const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_erf(result.value, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class erfc(const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_erfc(result.value, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class j0(const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_j0(result.value, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class j1(const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_j1(result.value, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class jn(long int n, const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_jn(result.value, n, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class y0(const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_y0(result.value, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class y1(const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_y1(result.value, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class yn(long int n, const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_yn(result.value, n, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class agm(const mpfr_class &a, const mpfr_class &b) {
+        mpfr_class result;
+        mpfr_agm(result.value, a.value, b.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class ai(const mpfr_class &x) {
+        mpfr_class result;
+        mpfr_ai(result.value, x.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class const_log2() {
+        mpfr_class result;
+        mpfr_const_log2(result.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class const_pi() {
+        mpfr_class result;
+        mpfr_const_pi(result.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class const_euler() {
+        mpfr_class result;
+        mpfr_const_euler(result.value, defaults::rnd);
+        return result;
+    }
+    static mpfr_class const_catalan() {
+        mpfr_class result;
+        mpfr_const_catalan(result.value, defaults::rnd);
+        return result;
+    }
     ////////////////////////////////////////////////////////////////////////////////////////
     bool is_nan() const { return mpfr_nan_p(value) != 0; }
     bool is_inf() const { return mpfr_inf_p(value) != 0; }
