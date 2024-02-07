@@ -193,6 +193,11 @@ void testLog() {
     // log(1) = 0
     std::string expected = "0.0000000000";
     assertMpfrEquals(result, expected.c_str());
+    // log(2) = 0.69314718056
+    a = "2.0";
+    expected = "0.6931471806";
+    result = mpfr_class::log(a);
+    assertMpfrEquals(result, expected.c_str());
     std::cout << "Log test passed." << std::endl;
 }
 
@@ -201,6 +206,11 @@ void testLog10() {
     mpfr_class result = mpfr_class::log10(a);
     // log10(10) = 1
     std::string expected = "1.0000000000";
+    assertMpfrEquals(result, expected.c_str());
+    // log(2) = 0.3010299957
+    a = "2.0";
+    expected = "0.3010299957";
+    result = mpfr_class::log10(a);
     assertMpfrEquals(result, expected.c_str());
     std::cout << "Log10 test passed." << std::endl;
 }
