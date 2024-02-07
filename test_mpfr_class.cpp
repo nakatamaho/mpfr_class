@@ -172,6 +172,48 @@ void testSqrt() {
     std::cout << "Test square root of a negative number (should be NaN) passed." << std::endl;
 }
 
+// Test function for set_prec and get_prec
+void testSetAndGetPrec() {
+    mpfr_class a; // Default precision
+    mpfr_prec_t defaultPrec = a.get_prec();
+    std::cout << "Default precision: " << defaultPrec << " bits" << std::endl;
+
+    mpfr_prec_t newPrec = 128; // New precision to set
+    a.set_prec(newPrec);
+    mpfr_prec_t retrievedPrec = a.get_prec();
+    std::cout << "New precision: " << retrievedPrec << " bits" << std::endl;
+
+    // Assert that the new precision is correctly set and retrieved
+    assert(retrievedPrec == newPrec);
+    std::cout << "Test passed: Precision was successfully set and retrieved." << std::endl;
+}
+void testLog() {
+    mpfr_class a("1.0");
+    mpfr_class result = mpfr_class::log(a);
+    // log(1) = 0
+    std::string expected = "0.0000000000";
+    assertMpfrEquals(result, expected.c_str());
+    std::cout << "Log test passed." << std::endl;
+}
+
+void testLog10() {
+    mpfr_class a("10.0");
+    mpfr_class result = mpfr_class::log10(a);
+    // log10(10) = 1
+    std::string expected = "1.0000000000";
+    assertMpfrEquals(result, expected.c_str());
+    std::cout << "Log10 test passed." << std::endl;
+}
+
+void testLog2() {
+    mpfr_class a("2.0");
+    mpfr_class result = mpfr_class::log2(a);
+    // log2(2) = 1
+    std::string expected = "1.0000000000";
+    assertMpfrEquals(result, expected.c_str());
+    std::cout << "Log2 test passed." << std::endl;
+}
+
 int main() {
     testDefaultPrecision();
     testDefaultRoundingMode();
@@ -182,7 +224,11 @@ int main() {
     testInitializationAndAssignmentString();
     testEqualitySameValue();
     testEqualityDifferentValue();
+    testSetAndGetPrec();
     testSqrt();
+    testLog();
+    testLog10();
+    testLog2();
 
     std::cout << "All tests passed." << std::endl;
 

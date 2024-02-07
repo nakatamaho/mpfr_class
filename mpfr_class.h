@@ -64,6 +64,10 @@ class mpfr_class {
         mpfr_init(value);
         mpfr_set_d(value, d, defaults::rnd);
     }
+    mpfr_class(unsigned long int ui) {
+        mpfr_init(value);
+        mpfr_set_ui(value, ui, defaults::rnd);
+    }
     mpfr_class(const char *str, int base = defaults::base, mpfr_rnd_t rnd = defaults::rnd) {
         mpfr_init(value);
         if (mpfr_set_str(value, str, base, rnd) != 0) {
@@ -106,7 +110,15 @@ class mpfr_class {
 
     friend inline bool operator==(const mpfr_class &lhs, const mpfr_class &rhs) { return mpfr_cmp(lhs.value, rhs.value) == 0; }
 
-    // Addition
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // initialization
+    ////////////////////////////////////////////////////////////////////////////////////////
+    void set_prec(mpfr_prec_t prec) { mpfr_set_prec(value, prec); }
+    mpfr_prec_t get_prec() const { return mpfr_get_prec(value); }
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // arithmetic
+    ////////////////////////////////////////////////////////////////////////////////////////
     mpfr_class operator+(const mpfr_class &other) const {
         mpfr_class result;
         mpfr_add(result.value, value, other.value, defaults::rnd);
@@ -119,33 +131,26 @@ class mpfr_class {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////
+    // transcendental functions
+    ////////////////////////////////////////////////////////////////////////////////////////
     static mpfr_class sqrt(const mpfr_class &a) {
         mpfr_class result;
-        if (mpfr_sqrt(result.value, a.value, defaults::rnd)) {
-            throw std::runtime_error("Error computing square root.");
-        }
+        mpfr_sqrt(result.value, a.value, defaults::rnd);
         return result;
     }
-    ////////////////////////////////////////////////////////////////////////////////////////
     static mpfr_class log(const mpfr_class &a) {
         mpfr_class result;
-        if (mpfr_log(result.value, a.value, defaults::rnd)) {
-            throw std::runtime_error("Error computing log.");
-        }
+        mpfr_log(result.value, a.value, defaults::rnd);
         return result;
     }
     static mpfr_class log10(const mpfr_class &a) {
         mpfr_class result;
-        if (mpfr_log10(result.value, a.value, defaults::rnd)) {
-            throw std::runtime_error("Error computing log10.");
-        }
+        mpfr_log10(result.value, a.value, defaults::rnd);
         return result;
     }
     static mpfr_class log2(const mpfr_class &a) {
         mpfr_class result;
-        if (mpfr_log2(result.value, a.value, defaults::rnd)) {
-            throw std::runtime_error("Error computing log2.");
-        }
+        mpfr_log2(result.value, a.value, defaults::rnd);
         return result;
     }
     ////////////////////////////////////////////////////////////////////////////////////////
