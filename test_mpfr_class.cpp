@@ -301,6 +301,28 @@ void testMultplication() {
     std::cout << "Multiplication Test passed." << std::endl;
 }
 
+void testDivision() {
+    mpfr_class a(6.0);
+    mpfr_class b(2.0);
+    std::string expected = "3.0000000000";
+
+    mpfr_class c = a / b;
+    assertMpfrEquals(c, expected.c_str());
+    a /= b;
+    assertMpfrEquals(a, expected.c_str());
+    std::cout << "Division Test passed." << std::endl;
+}
+void testSubtraction() {
+    mpfr_class a(5.0);
+    mpfr_class b(2.0);
+    std::string expected = "3.0000000000";
+
+    mpfr_class c = a - b;
+    assertMpfrEquals(c, expected.c_str());
+    a -= b;
+    assertMpfrEquals(a, expected.c_str());
+    std::cout << "Subtraction Test passed." << std::endl;
+}
 int main() {
     testDefaultPrecision();
     testDefaultRoundingMode();
@@ -318,6 +340,8 @@ int main() {
     testLog2();
     testAddition();
     testMultplication();
+    testDivision();
+    testSubtraction();
 
     std::cout << "All tests passed." << std::endl;
 
