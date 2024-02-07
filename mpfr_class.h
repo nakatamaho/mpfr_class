@@ -155,6 +155,7 @@ class mpfr_class {
     }
     ////////////////////////////////////////////////////////////////////////////////////////
     bool is_nan() const { return mpfr_nan_p(value) != 0; }
+    bool is_inf() const { return mpfr_inf_p(value) != 0; }
 
     mpfr_t *get_mpfr_t() { return &value; }
 
