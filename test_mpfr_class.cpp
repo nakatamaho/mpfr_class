@@ -8,10 +8,11 @@
 using namespace mpfrcxx;
 
 // Asserts that the mpfr_class object equals the expected string representation
-void assertMpfrEquals(mpfrcxx::mpfr_class &mpfrObj, const char *expected, int base = defaults::base, int precision = 10) {
+bool IsMpfrEquals(mpfrcxx::mpfr_class &mpfrObj, const char *expected, int base = defaults::base, int precision = 10) {
     char formatString[64];
-    // Adjust the comparison based on the base
     char buffer[64];
+
+    // Adjust the comparison based on the base
     switch (base) {
     case 2:
         std::sprintf(formatString, "%%.%dRb", precision);         // Generates format string like "%.10Rf"
@@ -31,8 +32,10 @@ void assertMpfrEquals(mpfrcxx::mpfr_class &mpfrObj, const char *expected, int ba
         printf("not supported");
         exit(-1);
     }
-    // Compare the generated string with the expected value
-    assert(std::strcmp(buffer, expected) == 0 && "The mpfr object's value does not match the expected value.");
+    if (std::strcmp(buffer, expected) == 0)
+        return true;
+    else
+        return false;
 }
 
 void testDefaultPrecision() {
@@ -88,12 +91,12 @@ void testInitializationAndAssignmentDouble() {
     const char *expectedValue = "3.1415926535";
 
     mpfrcxx::mpfr_class a = testValue;
-    assertMpfrEquals(a, expectedValue);
+    assert(IsMpfrEquals(a, expectedValue));
     std::cout << "Substitution from double using constructor test passed." << std::endl;
 
     mpfrcxx::mpfr_class b;
     b = testValue;
-    assertMpfrEquals(b, expectedValue);
+    assert(IsMpfrEquals(b, expectedValue));
     std::cout << "Substitution from double using assignment test passed." << std::endl;
 }
 
@@ -101,52 +104,52 @@ void testInitializationAndAssignmentString() {
     // Testing initialization with a decimal number using a constructor
     const char *expectedDecimalValue = "1.4142135624";
     mpfr_class a = expectedDecimalValue;
-    assertMpfrEquals(a, expectedDecimalValue);
+    assert(IsMpfrEquals(a, expectedDecimalValue));
     std::cout << "Constructor initialization with decimal '" << expectedDecimalValue << "' test passed." << std::endl;
 
     // Testing initialization with a decimal number using an assignment operator
     mpfr_class b;
     b = expectedDecimalValue;
-    assertMpfrEquals(b, expectedDecimalValue);
+    assert(IsMpfrEquals(b, expectedDecimalValue));
     std::cout << "Assignment initialization with decimal '" << expectedDecimalValue << "' test passed." << std::endl;
 
     // Testing initialization with a decimal number using a constructor
     std::string expectedDecimalValueString = "3.1415926535";
     mpfr_class c = expectedDecimalValueString;
-    assertMpfrEquals(c, expectedDecimalValueString.c_str());
+    assert(IsMpfrEquals(c, expectedDecimalValueString.c_str()));
     std::cout << "Constructor initialization with decimal '" << expectedDecimalValueString << "' test passed." << std::endl;
 
     // Testing initialization with a decimal number using an assignment operator
     mpfr_class d;
     d = expectedDecimalValueString;
-    assertMpfrEquals(d, expectedDecimalValueString.c_str());
+    assert(IsMpfrEquals(d, expectedDecimalValueString.c_str()));
     std::cout << "Assignment initialization with decimal '" << expectedDecimalValueString << "' test passed." << std::endl;
 
     // Testing initialization with a hexadecimal number using an assignment operator
     const char *expectedHexValue = "0x3.243f6a8885a3p+0";
     mpfr_class e(expectedHexValue, 16);
-    assertMpfrEquals(e, expectedHexValue, 16, 12);
+    assert(IsMpfrEquals(e, expectedHexValue, 16, 12));
     std::cout << "Assignment initialization with hexadecimal '" << expectedHexValue << "' test passed." << std::endl;
 
     defaults::base = 16;
     // Testing initialization with a hexadecimal number using a constructor
     mpfr_class f;
     e = expectedHexValue;
-    assertMpfrEquals(e, expectedHexValue, defaults::base, 12);
+    assert(IsMpfrEquals(e, expectedHexValue, defaults::base, 12));
     std::cout << "Constructor initialization with hexadecimal '" << expectedHexValue << "' test passed." << std::endl;
     defaults::base = 10;
 
     // Testing initialization with a hexadecimal number using an assignment operator
     const char *expectedBinaryValue = "1.0101010001000100010001011010001000100010001011p+1";
     mpfr_class g(expectedBinaryValue, 2);
-    assertMpfrEquals(g, expectedBinaryValue, 2, 46);
+    assert(IsMpfrEquals(g, expectedBinaryValue, 2, 46));
     std::cout << "Assignment initialization with binary '" << expectedBinaryValue << "' test passed." << std::endl;
 
     defaults::base = 2;
     // Testing initialization with a binaryadecimal number using a constructor
     mpfr_class h;
     h = expectedBinaryValue;
-    assertMpfrEquals(h, expectedBinaryValue, defaults::base, 46);
+    assert(IsMpfrEquals(h, expectedBinaryValue, defaults::base, 46));
     std::cout << "Constructor initialization with binary '" << expectedBinaryValue << "' test passed." << std::endl;
     defaults::base = 10;
 }
@@ -175,13 +178,13 @@ void testSqrt() {
     a = "4.0"; // Square root of 4.0 is 2.0
     mpfr_class result = mpfr_class::sqrt(a);
     std::string expected = "2.0000000000";
-    assertMpfrEquals(result, expected.c_str());
+    assert(IsMpfrEquals(result, expected.c_str()));
 
     // Test Case 2: Calculate the square root of 0
     mpfr_class b("0.0"); // Square root of 0.0 is 0.0
     result = mpfr_class::sqrt(b);
     expected = "0.0000000000";
-    assertMpfrEquals(result, expected.c_str());
+    assert(IsMpfrEquals(result, expected.c_str()));
 
     // Test Case 3: Calculate the square root of a negative number (should raise an error)
     mpfr_class c("-1.0");
@@ -210,12 +213,12 @@ void testLog() {
     mpfr_class result = mpfr_class::log(a);
     // log(1) = 0
     std::string expected = "0.0000000000";
-    assertMpfrEquals(result, expected.c_str());
+    assert(IsMpfrEquals(result, expected.c_str()));
     // log(2) = 0.69314718056
     a = "2.0";
     expected = "0.6931471806";
     result = mpfr_class::log(a);
-    assertMpfrEquals(result, expected.c_str());
+    assert(IsMpfrEquals(result, expected.c_str()));
 
     a = "0.0";
     result = mpfr_class::log(a);
@@ -234,12 +237,12 @@ void testLog10() {
     mpfr_class result = mpfr_class::log10(a);
     // log10(10) = 1
     std::string expected = "1.0000000000";
-    assertMpfrEquals(result, expected.c_str());
+    assert(IsMpfrEquals(result, expected.c_str()));
     // log(2) = 0.3010299957
     a = "2.0";
     expected = "0.3010299957";
     result = mpfr_class::log10(a);
-    assertMpfrEquals(result, expected.c_str());
+    assert(IsMpfrEquals(result, expected.c_str()));
 
     a = "0.0";
     result = mpfr_class::log10(a);
@@ -258,12 +261,12 @@ void testLog2() {
     mpfr_class result = mpfr_class::log2(a);
     // log2(2) = 1
     std::string expected = "1.0000000000";
-    assertMpfrEquals(result, expected.c_str());
+    assert(IsMpfrEquals(result, expected.c_str()));
     // log2(10) = 3.3219280949
     a = "10.0";
     expected = "3.3219280949";
     result = mpfr_class::log2(a);
-    assertMpfrEquals(result, expected.c_str());
+    assert(IsMpfrEquals(result, expected.c_str()));
 
     a = "0.0";
     result = mpfr_class::log2(a);
@@ -283,9 +286,9 @@ void testAddition() {
     std::string expected = "4.0000000000";
 
     mpfr_class c = a + b;
-    assertMpfrEquals(c, expected.c_str());
+    assert(IsMpfrEquals(c, expected.c_str()));
     a += b;
-    assertMpfrEquals(a, expected.c_str());
+    assert(IsMpfrEquals(a, expected.c_str()));
     std::cout << "Addition Test passed." << std::endl;
 }
 
@@ -295,9 +298,9 @@ void testMultplication() {
     std::string expected = "6.0000000000";
 
     mpfr_class c = a * b;
-    assertMpfrEquals(c, expected.c_str());
+    assert(IsMpfrEquals(c, expected.c_str()));
     a *= b;
-    assertMpfrEquals(a, expected.c_str());
+    assert(IsMpfrEquals(a, expected.c_str()));
     std::cout << "Multiplication Test passed." << std::endl;
 }
 
@@ -307,9 +310,9 @@ void testDivision() {
     std::string expected = "3.0000000000";
 
     mpfr_class c = a / b;
-    assertMpfrEquals(c, expected.c_str());
+    assert(IsMpfrEquals(c, expected.c_str()));
     a /= b;
-    assertMpfrEquals(a, expected.c_str());
+    assert(IsMpfrEquals(a, expected.c_str()));
     std::cout << "Division Test passed." << std::endl;
 }
 void testSubtraction() {
@@ -318,11 +321,27 @@ void testSubtraction() {
     std::string expected = "3.0000000000";
 
     mpfr_class c = a - b;
-    assertMpfrEquals(c, expected.c_str());
+    assert(IsMpfrEquals(c, expected.c_str()));
     a -= b;
-    assertMpfrEquals(a, expected.c_str());
+    assert(IsMpfrEquals(a, expected.c_str()));
     std::cout << "Subtraction Test passed." << std::endl;
 }
+
+void testEqNonEq() {
+    mpfr_class obj1("2.718281828459045");
+    mpfr_class obj2("2.718281828459045");
+    assert(obj1 == obj2);
+    std::cout << "Equality test passed." << std::endl;
+
+    mpfr_class obj3("3.141592653589793");
+    assert(obj1 != obj3);
+    std::cout << "Inequality test passed." << std::endl;
+
+    mpfr_class obj4("2.7182818284590451");
+    assert(obj1 != obj4);
+    std::cout << "Subtle difference test passed." << std::endl;
+}
+
 int main() {
     testDefaultPrecision();
     testDefaultRoundingMode();
@@ -342,6 +361,7 @@ int main() {
     testMultplication();
     testDivision();
     testSubtraction();
+    testEqNonEq();
 
     std::cout << "All tests passed." << std::endl;
 
