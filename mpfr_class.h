@@ -34,6 +34,7 @@
 #include <iostream>
 #include <utility>
 
+#define ___MPFR_CLASS_EXPLICIT___ explicit
 namespace mpfrcxx {
 
 class defaults {
@@ -70,14 +71,17 @@ class mpfr_class {
     // Initialization using a constructor
     // move constructor
     mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
-    mpfr_class(double d) noexcept {
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(double d) noexcept {
         mpfr_init(value);
         mpfr_set_d(value, d, defaults::rnd);
     }
-    mpfr_class(unsigned long int ui) {
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(unsigned long int ui) {
         mpfr_init(value);
         mpfr_set_ui(value, ui, defaults::rnd);
     }
+
+
+
     mpfr_class(const char *str, int base = defaults::base, mpfr_rnd_t rnd = defaults::rnd) {
         mpfr_init(value);
         if (mpfr_set_str(value, str, base, rnd) != 0) {
@@ -92,7 +96,6 @@ class mpfr_class {
             throw std::runtime_error("Failed to initialize mpfr_t with given string.");
         }
     }
-
     // Initialization using assignment operator
     // Copy-and-Swap Idiom; it does both the copy assignment operator and the move assignment operator.
     mpfr_class &operator=(mpfr_class other) noexcept {

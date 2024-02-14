@@ -41,7 +41,6 @@ Contributions to the mpfr_class are welcome. Please submit pull requests or open
 
 This project is licensed under the 2-clause BSD License.
 
-
 # ChatGPT4
 
 * https://chat.openai.com/c/e88b85d9-dbca-4bdc-bfb3-52cff97ddae4
