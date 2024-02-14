@@ -30,11 +30,14 @@
 #error "This class only runs on C++ 17 and later"
 #endif
 
+#define MPFR_WANT_FLOAT128
+
 #include <mpfr.h>
 #include <iostream>
 #include <utility>
 
 #define ___MPFR_CLASS_EXPLICIT___ explicit
+
 namespace mpfrcxx {
 
 class defaults {
@@ -43,6 +46,9 @@ class defaults {
     static mpfr_rnd_t rnd;
     static int base;
 
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.1 Initialization Functions (part II)
+    ////////////////////////////////////////////////////////////////////////////////////////
     static inline mpfr_prec_t get_default_prec() { return mpfr_get_default_prec(); }
     static void set_default_prec(mpfr_prec_t prec) { mpfr_set_default_prec(prec); }
     static inline mpfr_rnd_t get_default_rounding_mode() { return mpfr_get_default_rounding_mode(); }
@@ -54,7 +60,7 @@ class defaults {
 class mpfr_class {
   public:
     ////////////////////////////////////////////////////////////////////////////////////////
-    // 5.1 Initialization Functions
+    // 5.1 Initialization Functions (part I)
     ////////////////////////////////////////////////////////////////////////////////////////
     mpfr_class() { mpfr_init(value); }
     ~mpfr_class() { mpfr_clear(value); }
@@ -71,17 +77,42 @@ class mpfr_class {
     // Initialization using a constructor
     // move constructor
     mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(uintmax_t uj) noexcept {
+        mpfr_init(value);
+        mpfr_set_uj(value, uj, defaults::rnd);
+    }
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(intmax_t sj) noexcept {
+        mpfr_init(value);
+        mpfr_set_sj(value, sj, defaults::rnd);
+    }
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(float op) noexcept {
+        mpfr_init(value);
+        mpfr_set_flt(value, op, defaults::rnd);
+    }
     ___MPFR_CLASS_EXPLICIT___ mpfr_class(double d) noexcept {
         mpfr_init(value);
         mpfr_set_d(value, d, defaults::rnd);
     }
-    ___MPFR_CLASS_EXPLICIT___ mpfr_class(unsigned long int ui) {
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(long double op) noexcept {
         mpfr_init(value);
-        mpfr_set_ui(value, ui, defaults::rnd);
+        mpfr_set_ld(value, op, defaults::rnd);
     }
-
-
-
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(_Float128 op) noexcept {
+        mpfr_init(value);
+        mpfr_set_float128(value, op, defaults::rnd);
+    }
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const mpz_t op) noexcept {
+        mpfr_init(value);
+        mpfr_set_z(value, op, defaults::rnd);
+    }
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const mpq_t op) noexcept {
+        mpfr_init(value);
+        mpfr_set_q(value, op, defaults::rnd);
+    }
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const mpf_t op) noexcept {
+        mpfr_init(value);
+        mpfr_set_f(value, op, defaults::rnd);
+    }
     mpfr_class(const char *str, int base = defaults::base, mpfr_rnd_t rnd = defaults::rnd) {
         mpfr_init(value);
         if (mpfr_set_str(value, str, base, rnd) != 0) {
@@ -120,11 +151,6 @@ class mpfr_class {
         }
         return *this;
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////
-    // initialization
-    ////////////////////////////////////////////////////////////////////////////////////////
-
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.3 Combined Initialization and Assignment Functions
     ////////////////////////////////////////////////////////////////////////////////////////
