@@ -1,10 +1,10 @@
 # * How to build
-#  docker build -f Dockerfile --build-arg SSH_KEY="$(cat ~/.ssh/id_ed25519)" -t mpfrcxx .
+#  docker build -f Dockerfile --build-arg SSH_KEY="$(cat ~/.ssh/id_ed25519)" -t mpfr_class .
 # * How to run
 #  sudo sh -c 'echo -1 >/proc/sys/kernel/perf_event_paranoid' # to run perf
 #  or
 #  sudo sysctl -w kernel.perf_event_paranoid=-1 # to run perf
-#  docker run -it mpfrcxx /bin/bash
+#  docker run -it mpfr_class /bin/bash
 #
 FROM ubuntu:22.04
 
@@ -62,7 +62,7 @@ RUN echo "\n\
 " > /home/$DOCKER_USER/.gitconfig
 SHELL ["/bin/bash", "-c"]
 
-RUN cd ${WORK} && git clone https://github.com/nakatamaho/mpfrcxx.git
-RUN cd ${WORK}/mpfrcxx && git remote set-url origin git@github.com:nakatamaho/mpfrcxx.git
-RUN cd ${WORK}/mpfrcxx/setup && bash -x setup_gmp.sh && bash -x setup_mpfr.sh && bash -x setup_mpc.sh  
-RUN cd ${WORK}/mpfrcxx/ && make
+RUN cd ${WORK} && git clone https://github.com/nakatamaho/mpfr_class.git
+RUN cd ${WORK}/mpfr_class && git remote set-url origin git@github.com:nakatamaho/mpfr_class.git
+RUN cd ${WORK}/mpfr_class/setup && bash -x setup_gmp.sh && bash -x setup_mpfr.sh && bash -x setup_mpc.sh  
+RUN cd ${WORK}/mpfr_class/ && make
