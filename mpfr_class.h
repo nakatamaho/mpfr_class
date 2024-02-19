@@ -38,7 +38,7 @@
 
 #define ___MPFR_CLASS_EXPLICIT___ explicit
 
-namespace mpfr_class {
+namespace mpfrcxx {
 
 class defaults {
   public:
@@ -634,18 +634,18 @@ class mpfr_class {
     mpfr_t value;
 };
 
-} // namespace mpfr_class
+} // namespace mpfrcxx
 
-mpfr_prec_t mpfr_class::defaults::prec;
-mpfr_rnd_t mpfr_class::defaults::rnd;
-int mpfr_class::defaults::base;
+mpfr_prec_t mpfrcxx::defaults::prec;
+mpfr_rnd_t mpfrcxx::defaults::rnd;
+int mpfrcxx::defaults::base;
 
 class Initializer {
   public:
     Initializer() {
-        mpfr_class::defaults::set_default_prec(512);
-        mpfr_class::defaults::set_default_rounding_mode(MPFR_RNDN);
-        mpfr_class::defaults::set_default_base(10);
+        mpfrcxx::defaults::set_default_prec(512);
+        mpfrcxx::defaults::set_default_rounding_mode(MPFR_RNDN);
+        mpfrcxx::defaults::set_default_base(10);
     }
 };
 
