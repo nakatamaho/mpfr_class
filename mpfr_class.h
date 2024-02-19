@@ -640,13 +640,13 @@ mpfr_prec_t mpfrcxx::defaults::prec;
 mpfr_rnd_t mpfrcxx::defaults::rnd;
 int mpfrcxx::defaults::base;
 
-class Initializer {
+class mpfr_class_initializer {
   public:
-    Initializer() {
+    mpfr_class_initializer() {
         mpfrcxx::defaults::set_default_prec(512);
         mpfrcxx::defaults::set_default_rounding_mode(MPFR_RNDN);
         mpfrcxx::defaults::set_default_base(10);
     }
 };
 
-Initializer globalInitializer;
+mpfr_class_initializer global_mpfr_class_initializer;
