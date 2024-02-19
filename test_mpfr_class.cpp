@@ -30,6 +30,7 @@
 #include <cassert>
 #include <cstring>
 #include <string>
+#include <iomanip>
 
 #include "mpfr_class.h"
 
@@ -395,6 +396,13 @@ int main() {
     testEqNonEq();
 
     std::cout << "All tests passed." << std::endl;
+
+    mpfr_class a(1234.56789);
+
+    std::cout << "Default: " << a << std::endl;
+    std::cout << std::setprecision(15) << "Precision 15: " << a << std::endl;
+    std::cout << std::fixed << "Fixed: " << a << std::endl;
+    std::cout << std::scientific << std::setprecision(100) << "Scientific: " << a << std::endl;
 
     return 0;
 }

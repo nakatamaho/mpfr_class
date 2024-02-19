@@ -623,7 +623,7 @@ class mpfr_class {
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.8 Input and Output Functions
     ////////////////////////////////////////////////////////////////////////////////////////
-
+    friend std::ostream &operator<<(std::ostream &os, const mpfr_class &m);
     ////////////////////////////////////////////////////////////////////////////////////////
     bool is_nan() const { return mpfr_nan_p(value) != 0; }
     bool is_inf() const { return mpfr_inf_p(value) != 0; }
@@ -633,6 +633,24 @@ class mpfr_class {
   private:
     mpfr_t value;
 };
+
+std::ostream &operator<<(std::ostream &os, const mpfr_class &m) {
+    std::streamsize prec = os.precision();
+    std::ios_base::fmtflags flags = os.flags();
+
+    char *str = nullptr;
+    if (flags & std::ios::scientific) {
+        mpfr_asprintf(&str, "%.*Re", static_cast<int>(prec), m.value);
+    } else if (flags & std::ios::fixed) {
+        mpfr_asprintf(&str, "%.*Rf", static_cast<int>(prec), m.value);
+    } else {
+        mpfr_asprintf(&str, "%.*Rg", static_cast<int>(prec), m.value);
+    }
+    os << str;
+    mpfr_free_str(str);
+
+    return os;
+}
 
 } // namespace mpfrcxx
 
