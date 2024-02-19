@@ -371,6 +371,27 @@ void testEqNonEq() {
     std::cout << "Subtle difference test passed." << std::endl;
 }
 
+void testOutputOperator() {
+    mpfr_class num1(123456.789);
+    mpfr_class num2(0.0000123456789);
+    mpfr_class num3(123456789.0);
+
+    std::ostringstream oss;
+
+    oss << num1;
+    assert(oss.str() == "123456.789");
+    oss.str("");
+    oss.clear();
+
+    oss << std::fixed << std::setprecision(4) << num2;
+    assert(oss.str() == "0.0000");
+    oss.str("");
+    oss.clear();
+
+    oss << std::scientific << std::setprecision(2) << num3;
+    assert(oss.str() == "1.23e+08");
+}
+
 int main() {
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.1 Initialization Functions
@@ -394,15 +415,9 @@ int main() {
     testDivision();
     testSubtraction();
     testEqNonEq();
+    testOutputOperator();
 
     std::cout << "All tests passed." << std::endl;
-
-    mpfr_class a(1234.56789);
-
-    std::cout << "Default: " << a << std::endl;
-    std::cout << std::setprecision(15) << "Precision 15: " << a << std::endl;
-    std::cout << std::fixed << "Fixed: " << a << std::endl;
-    std::cout << std::scientific << std::setprecision(100) << "Scientific: " << a << std::endl;
 
     return 0;
 }
