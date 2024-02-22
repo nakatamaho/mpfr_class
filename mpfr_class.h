@@ -216,6 +216,7 @@ class mpfr_class {
     friend mpfr_class log(const mpfr_class &a);
     friend mpfr_class log_ui(unsigned long int op);
     friend mpfr_class log2(const mpfr_class &a);
+    friend mpfr_class log10(const mpfr_class &a);
 
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.8 Input and Output Functions
@@ -252,6 +253,30 @@ std::ostream &operator<<(std::ostream &os, const mpfr_class &m) {
 mpfr_class sqrt(const mpfr_class &a) {
     mpfr_class result;
     mpfr_sqrt(result.value, a.get_mpfr_t(), defaults::rnd);
+    return result;
+}
+
+mpfr_class log(const mpfr_class &a) {
+    mpfr_class result;
+    mpfr_log(result.value, a.value, defaults::rnd);
+    return result;
+}
+
+mpfr_class log_ui(unsigned long int op) {
+    mpfr_class result;
+    mpfr_log_ui(result.value, op, defaults::rnd);
+    return result;
+}
+
+mpfr_class log2(const mpfr_class &a) {
+    mpfr_class result;
+    mpfr_log2(result.value, a.value, defaults::rnd);
+    return result;
+}
+
+mpfr_class log10(const mpfr_class &a) {
+    mpfr_class result;
+    mpfr_log10(result.value, a.value, defaults::rnd);
     return result;
 }
 

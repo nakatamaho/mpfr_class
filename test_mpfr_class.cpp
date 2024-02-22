@@ -239,22 +239,22 @@ void testSetAndGetPrec() {
 }
 void testLog() {
     mpfr_class a("1.0");
-    mpfr_class result = mpfr_class::log(a);
+    mpfr_class result = log(a);
     // log(1) = 0
     std::string expected = "0.0000000000";
     assert(IsMpfrEquals(result, expected.c_str()));
     // log(2) = 0.69314718056
     a = "2.0";
     expected = "0.6931471806";
-    result = mpfr_class::log(a);
+    result = log(a);
     assert(IsMpfrEquals(result, expected.c_str()));
 
     a = "0.0";
-    result = mpfr_class::log(a);
+    result = log(a);
     assert(result.is_inf());
     std::cout << "Test log zero (should be -Inf) passed." << std::endl;
     a = "-1.0";
-    result = mpfr_class::log(a);
+    result = log(a);
     assert(result.is_nan());
     std::cout << "Test log negative (should be NaN) passed." << std::endl;
 
@@ -263,22 +263,22 @@ void testLog() {
 
 void testLog10() {
     mpfr_class a("10.0");
-    mpfr_class result = mpfr_class::log10(a);
+    mpfr_class result = log10(a);
     // log10(10) = 1
     std::string expected = "1.0000000000";
     assert(IsMpfrEquals(result, expected.c_str()));
     // log(2) = 0.3010299957
     a = "2.0";
     expected = "0.3010299957";
-    result = mpfr_class::log10(a);
+    result = log10(a);
     assert(IsMpfrEquals(result, expected.c_str()));
 
     a = "0.0";
-    result = mpfr_class::log10(a);
+    result = log10(a);
     assert(result.is_inf());
     std::cout << "Test log10 zero (should be -Inf) passed." << std::endl;
     a = "-1.0";
-    result = mpfr_class::log10(a);
+    result = log10(a);
     assert(result.is_nan());
     std::cout << "Test log10 negative (should be NaN) passed." << std::endl;
 
@@ -287,22 +287,22 @@ void testLog10() {
 
 void testLog2() {
     mpfr_class a("2.0");
-    mpfr_class result = mpfr_class::log2(a);
+    mpfr_class result = log2(a);
     // log2(2) = 1
     std::string expected = "1.0000000000";
     assert(IsMpfrEquals(result, expected.c_str()));
     // log2(10) = 3.3219280949
     a = "10.0";
     expected = "3.3219280949";
-    result = mpfr_class::log2(a);
+    result = log2(a);
     assert(IsMpfrEquals(result, expected.c_str()));
 
     a = "0.0";
-    result = mpfr_class::log2(a);
+    result = log2(a);
     assert(result.is_inf());
     std::cout << "Test log2 zero (should be -Inf) passed." << std::endl;
     a = "-1.0";
-    result = mpfr_class::log2(a);
+    result = (a);
     assert(result.is_nan());
     std::cout << "Test log2 negative (should be NaN) passed." << std::endl;
 
