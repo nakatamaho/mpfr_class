@@ -77,14 +77,14 @@ class mpfr_class {
     // Initialization using a constructor
     // move constructor
     mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
-    ___MPFR_CLASS_EXPLICIT___ mpfr_class(uintmax_t uj) noexcept {
-        mpfr_init(value);
-        mpfr_set_uj(value, uj, defaults::rnd);
-    }
-    ___MPFR_CLASS_EXPLICIT___ mpfr_class(intmax_t sj) noexcept {
-        mpfr_init(value);
-        mpfr_set_sj(value, sj, defaults::rnd);
-    }
+    //    ___MPFR_CLASS_EXPLICIT___ mpfr_class(uintmax_t uj) noexcept {
+    //        mpfr_init(value);
+    //        mpfr_set_uj(value, uj, defaults::rnd);
+    //    }
+    //    ___MPFR_CLASS_EXPLICIT___ mpfr_class(intmax_t sj) noexcept {
+    //        mpfr_init(value);
+    //        mpfr_set_sj(value, sj, defaults::rnd);
+    //    }
     ___MPFR_CLASS_EXPLICIT___ mpfr_class(float op) noexcept {
         mpfr_init(value);
         mpfr_set_flt(value, op, defaults::rnd);
@@ -297,21 +297,21 @@ class mpfr_class {
         mpfr_pow_si(result.value, base.value, exponent, defaults::rnd);
         return result;
     }
-    static mpfr_class pow_uj(const mpfr_class &base, uintmax_t exponent) {
-        mpfr_class result;
-        mpfr_pow_uj(result.value, base.value, exponent, defaults::rnd);
-        return result;
-    }
-    static mpfr_class pow_sj(const mpfr_class &base, intmax_t exponent) {
-        mpfr_class result;
-        mpfr_pow_sj(result.value, base.value, exponent, defaults::rnd);
-        return result;
-    }
-    static mpfr_class pown(const mpfr_class &base, intmax_t exponent) {
-        mpfr_class result;
-        mpfr_pown(result.value, base.value, exponent, defaults::rnd);
-        return result;
-    }
+    //    static mpfr_class pow_uj(const mpfr_class &base, uintmax_t exponent) {
+    //        mpfr_class result;
+    //        mpfr_pow_uj(result.value, base.value, exponent, defaults::rnd);
+    //        return result;
+    //    }
+    //    static mpfr_class pow_sj(const mpfr_class &base, intmax_t exponent) {
+    //        mpfr_class result;
+    //        mpfr_pow_sj(result.value, base.value, exponent, defaults::rnd);
+    //        return result;
+    //    }
+    //    static mpfr_class pown(const mpfr_class &base, intmax_t exponent) {
+    //        mpfr_class result;
+    //        mpfr_pown(result.value, base.value, exponent, defaults::rnd);
+    //        return result;
+    //    }
     static mpfr_class pow_z(const mpfr_class &base, const mpz_t exponent) {
         mpfr_class result;
         mpfr_pow_z(result.value, base.value, exponent, defaults::rnd);
