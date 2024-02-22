@@ -34,10 +34,10 @@
 
 #include "mpfr_class.h"
 
-using namespace mpfrcxx;
+using namespace mpfr;
 
 // Asserts that the mpfr_class object equals the expected string representation
-bool IsMpfrEquals(mpfrcxx::mpfr_class &mpfrObj, const char *expected, int base = defaults::base, int precision = 10) {
+bool IsMpfrEquals(mpfr_class &mpfrObj, const char *expected, int base = defaults::base, int precision = 10) {
     char formatString[64];
     char buffer[64];
 
@@ -119,11 +119,11 @@ void testInitializationAndAssignmentDouble() {
     double testValue = 3.1415926535;
     const char *expectedValue = "3.1415926535";
 
-    mpfrcxx::mpfr_class a = (mpfr_class)testValue;
+    mpfr_class a = (mpfr_class)testValue;
     assert(IsMpfrEquals(a, expectedValue));
     std::cout << "Substitution from double using constructor test passed." << std::endl;
 
-    mpfrcxx::mpfr_class b;
+    mpfr_class b;
     b = testValue;
     assert(IsMpfrEquals(b, expectedValue));
     std::cout << "Substitution from double using assignment test passed." << std::endl;
@@ -205,19 +205,19 @@ void testSqrt() {
     // Test Case 1: Calculate the square root of a positive number
     mpfr_class a;
     a = "4.0"; // Square root of 4.0 is 2.0
-    mpfr_class result = mpfr_class::sqrt(a);
+    mpfr_class result = sqrt(a);
     std::string expected = "2.0000000000";
     assert(IsMpfrEquals(result, expected.c_str()));
 
     // Test Case 2: Calculate the square root of 0
     mpfr_class b("0.0"); // Square root of 0.0 is 0.0
-    result = mpfr_class::sqrt(b);
+    result = sqrt(b);
     expected = "0.0000000000";
     assert(IsMpfrEquals(result, expected.c_str()));
 
     // Test Case 3: Calculate the square root of a negative number (should raise an error)
     mpfr_class c("-1.0");
-    result = mpfr_class::sqrt(c);
+    result = sqrt(c);
     assert(result.is_nan()); // Check if the result is NaN
     std::cout << "Test square root of a negative number (should be NaN) passed." << std::endl;
 }
