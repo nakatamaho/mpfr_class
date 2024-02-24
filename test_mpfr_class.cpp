@@ -302,7 +302,7 @@ void testLog2() {
     assert(result.is_inf());
     std::cout << "Test log2 zero (should be -Inf) passed." << std::endl;
     a = "-1.0";
-    result = (a);
+    result = log2(a);
     assert(result.is_nan());
     std::cout << "Test log2 negative (should be NaN) passed." << std::endl;
 
@@ -328,9 +328,8 @@ void testLog1p() {
 void testLog2p1() {
     mpfr_class a("1.0");
     mpfr_class result = log2p1(a);
-    std::string expected = "1.0"; // Exact value for log2p1(1)
+    std::string expected = "1.0000000000"; // Exact value for log2p1(1)
     assert(IsMpfrEquals(result, expected.c_str()));
-
     std::cout << "Log2p1 tests passed." << std::endl;
 }
 
