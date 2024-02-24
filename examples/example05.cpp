@@ -16,7 +16,7 @@ int main() {
     for (int i = 0; i < 5; ++i) { // Number of iterations
         a_next = (a + b) / two;
         b_next = mpfr::sqrt(a * b);
-        t_next = t - p * mpfr::pow(a - a_next, 2);
+        t_next = t - p * mpfr::pow(a - a_next, two);
         p = two * p;
 
         // Update values for the next iteration
