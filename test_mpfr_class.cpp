@@ -309,6 +309,106 @@ void testLog2() {
     std::cout << "Log2 test passed." << std::endl;
 }
 
+// Test for log1p function
+void testLog1p() {
+    mpfr_class a("0.5");
+    mpfr_class result = log1p(a);
+    std::string expected = "0.4054651081"; // Approximate value for log1p(0.5)
+    assert(IsMpfrEquals(result, expected.c_str()));
+
+    a = "-0.5";
+    result = log1p(a);
+    expected = "-0.6931471806"; // Approximate value for log1p(-0.5)
+    assert(IsMpfrEquals(result, expected.c_str()));
+
+    std::cout << "Log1p tests passed." << std::endl;
+}
+
+// Test for log2p1 function
+void testLog2p1() {
+    mpfr_class a("1.0");
+    mpfr_class result = log2p1(a);
+    std::string expected = "1.0"; // Exact value for log2p1(1)
+    assert(IsMpfrEquals(result, expected.c_str()));
+
+    std::cout << "Log2p1 tests passed." << std::endl;
+}
+
+// Test for log10p1 function
+void testLog10p1() {
+    mpfr_class a("9.0");
+    mpfr_class result = log10p1(a);
+    std::string expected = "1.0"; // Exact value for log10p1(9)
+    assert(IsMpfrEquals(result, expected.c_str()));
+    std::cout << "Log10p1 tests passed." << std::endl;
+}
+
+// Test for exp function
+void testExp() {
+    mpfr_class a("1.0");
+    mpfr_class result = exp(a);
+    std::string expected = "2.7182818285"; // Approximate value for e
+    assert(IsMpfrEquals(result, expected.c_str()));
+
+    std::cout << "Exp tests passed." << std::endl;
+}
+
+// Test for exp2 function
+void testExp2() {
+    mpfr_class a("4.0");
+    mpfr_class result = exp2(a);
+    std::string expected = "16.0"; // Exact value for 2^4
+    assert(IsMpfrEquals(result, expected.c_str()));
+
+    std::cout << "Exp2 tests passed." << std::endl;
+}
+
+// Test for exp10 function
+void testExp10() {
+    mpfr_class a("2.0");
+    mpfr_class result = exp10(a);
+    std::string expected = "100.0"; // Exact value for 10^2
+    assert(IsMpfrEquals(result, expected.c_str()));
+
+    std::cout << "Exp10 tests passed." << std::endl;
+}
+
+// Test for const_log2 function
+void testConstLog2() {
+    mpfr_class result = const_log2(MPFR_RNDN);
+    std::string expected = "0.6931471806"; // Approximate value for log(2)
+    assert(IsMpfrEquals(result, expected.c_str()));
+
+    std::cout << "Const_log2 tests passed." << std::endl;
+}
+
+// Test for const_pi function
+void testConstPi() {
+    mpfr_class result = const_pi(MPFR_RNDN);
+    std::string expected = "3.1415926536"; // Approximate value for pi
+    assert(IsMpfrEquals(result, expected.c_str()));
+
+    std::cout << "Const_pi tests passed." << std::endl;
+}
+
+// Test for const_euler function
+void testConstEuler() {
+    mpfr_class result = const_euler(MPFR_RNDN);
+    std::string expected = "0.5772156649"; // Approximate value for Euler's constant
+    assert(IsMpfrEquals(result, expected.c_str()));
+
+    std::cout << "Const_euler tests passed." << std::endl;
+}
+
+// Test for const_catalan function
+void testConstCatalan() {
+    mpfr_class result = const_catalan(MPFR_RNDN);
+    std::string expected = "0.9159655942"; // Approximate value for Catalan's constant
+    assert(IsMpfrEquals(result, expected.c_str()));
+
+    std::cout << "Const_catalan tests passed." << std::endl;
+}
+
 void testAddition() {
     mpfr_class a(1.5);
     mpfr_class b(2.5);
@@ -410,6 +510,16 @@ int main() {
     testLog();
     testLog10();
     testLog2();
+    testLog1p();
+    testLog2p1();
+    testLog10p1();
+    testExp();
+    testExp2();
+    testExp10();
+    testConstLog2();
+    testConstPi();
+    testConstEuler();
+    testConstCatalan();
     testAddition();
     testMultplication();
     testDivision();
