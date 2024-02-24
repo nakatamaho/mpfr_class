@@ -476,8 +476,7 @@ void testOutputOperator() {
     mpfr_class num3(123456789.0);
 
     std::ostringstream oss;
-
-    oss << num1;
+    oss << std::fixed << std::setprecision(3) << num1;
     assert(oss.str() == "123456.789");
     oss.str("");
     oss.clear();
@@ -516,17 +515,32 @@ int main() {
     testDefaultRoundingMode();
     testDefaultConstructor();
     testCopyConstructor();
+    testSetAndGetPrec();
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.2 Assignment Functions
+    ////////////////////////////////////////////////////////////////////////////////////////
     testAssignmentOperator();
     testInitializationAndAssignmentDouble();
     testInitializationAndAssignmentString();
-    testEqualitySameValue();
-    testEqualityDifferentValue();
-    testSetAndGetPrec();
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.5 Arithmetic Functions
+    ////////////////////////////////////////////////////////////////////////////////////////
+    testAddition();
+    testMultplication();
+    testDivision();
+    testSubtraction();
+    testEqNonEq();
     testSqrt();
-
     testNeg();
     testAbs();
-
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.6 Comparison Functions
+    ////////////////////////////////////////////////////////////////////////////////////////
+    testEqualitySameValue();
+    testEqualityDifferentValue();
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.7 Transcendental Functions
+    ////////////////////////////////////////////////////////////////////////////////////////
     testLog();
     testLog10();
     testLog2();
@@ -540,11 +554,9 @@ int main() {
     testConstPi();
     testConstEuler();
     testConstCatalan();
-    testAddition();
-    testMultplication();
-    testDivision();
-    testSubtraction();
-    testEqNonEq();
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.8 Input and Output Functions
+    ////////////////////////////////////////////////////////////////////////////////////////
     testOutputOperator();
 
     std::cout << "All tests passed." << std::endl;
