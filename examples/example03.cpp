@@ -11,7 +11,7 @@ int main() {
 
     // Set precision
     mpfr::defaults::set_default_prec(precision_bits + 5); // Apply this precision to all mpfr_class variables
-    // unless +5, we got several last digits are inaccurate.
+    // unless +5, we'll get several inaccurate last digits.
 
     // Set initial values for calculating exp(1)
     mpfr::mpfr_class x(1.0);    // Initialize x as 1 for calculating exp(1)
@@ -27,12 +27,13 @@ int main() {
     }
 
     // Output the result with fixed point notation and set precision to 50 digits
-    std::cout << std::fixed << std::setprecision(digits) << "Calculated e using Taylor series: " << sum << std::endl;
+    std::cout << "Calculating e in " << digits << " digits" << std::endl;
+    std::cout << std::fixed << std::setprecision(digits) << "using Taylor series:  " << sum << std::endl;
     // Calculate and output the value of e using MPFR's const_e function
 
     mpfr::mpfr_class const_e;
     const_e = mpfr::exp(mpfr::mpfr_class(1)); // Calculate the value of e using MPFR
-    std::cout << "Value of e using MPFR's const_e:  " << const_e << std::endl;
+    std::cout << "using MPFR's const_e: " << const_e << std::endl;
 
     return 0;
 }
