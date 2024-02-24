@@ -5,7 +5,7 @@
 
 int main() {
     // Set initial values
-    int decimal_precision = 50;                                                             // You can change this value to adjust the precision
+    int decimal_precision = 100;                                                            // You can change this value to adjust the precision
     int bit_precision = static_cast<int>(std::ceil(decimal_precision * std::log2(10))) * 2; // Calculate bit precision from decimal, * 2 is for sure
     mpfr::defaults::set_default_prec(bit_precision);
     std::cout << std::fixed << std::setprecision(decimal_precision); // Set output to fixed-point notation with 50 digits of precision
@@ -44,6 +44,10 @@ int main() {
     }
 
     std::cout << "Converged after " << iteration << " iterations." << std::endl;
+    // Comparison with mpfr::sqrt
+    mpfr::mpfr_class _pi = mpfr::const_pi(); // Calculate const_pi() using MPFR
+    std::cout << "Result by this calculation:  " <<  pi << std::endl;
+    std::cout << "Result using mpfr::const_pi: " << _pi << std::endl;
 
     return 0;
 }
