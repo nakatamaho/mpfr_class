@@ -221,7 +221,36 @@ class mpfr_class {
     friend mpfr_class exp(const mpfr_class &op, mpfr_rnd_t rnd);
     friend mpfr_class exp2(const mpfr_class &op, mpfr_rnd_t rnd);
     friend mpfr_class exp10(const mpfr_class &op, mpfr_rnd_t rnd);
-    ///...///
+    friend mpfr_class expm1(const mpfr_class& op);
+    friend mpfr_class exp2m1(const mpfr_class& op);
+    friend mpfr_class exp10m1(const mpfr_class& op);
+    friend mpfr_class pow(const mpfr_class& op1, const mpfr_class& op2);
+    friend mpfr_class powr(const mpfr_class& op1, const mpfr_class& op2);
+    friend mpfr_class pow_ui(const mpfr_class& op1, unsigned long int op2);
+    friend mpfr_class pow_si(const mpfr_class& op1, long int op2);
+    friend mpfr_class pow_uj(const mpfr_class& op1, uintmax_t op2);
+    friend mpfr_class pow_sj(const mpfr_class& op1, intmax_t op2);
+    friend mpfr_class pown(const mpfr_class& op1, intmax_t n);
+    friend mpfr_class pow_z(const mpfr_class& op1, const mpz_t op2);
+    friend mpfr_class ui_pow_ui(unsigned long int op1, unsigned long int op2);
+    friend mpfr_class ui_pow(unsigned long int op1, const mpfr_class& op2);
+    friend mpfr_class cos(const mpfr_class& op);
+    friend mpfr_class sin(const mpfr_class& op);
+    friend mpfr_class tan(const mpfr_class& op);
+    friend mpfr_class cosu(const mpfr_class& op, unsigned long int u);
+    friend mpfr_class sinu(const mpfr_class& op, unsigned long int u);
+    friend mpfr_class tanu(const mpfr_class& op, unsigned long int u);
+    friend mpfr_class cospi(const mpfr_class& op);
+    friend mpfr_class sinpi(const mpfr_class& op);
+    friend mpfr_class tanpi(const mpfr_class& op);
+    friend void sin_cos(mpfr_class& sop, mpfr_class& cop, const mpfr_class& op);
+    friend mpfr_class sec(const mpfr_class& op);
+    friend mpfr_class csc(const mpfr_class& op);
+    friend mpfr_class cot(const mpfr_class& op);
+    friend mpfr_class acos(const mpfr_class& op);
+    friend mpfr_class asin(const mpfr_class& op);
+
+
     friend mpfr_class const_log2(mpfr_rnd_t rnd);
     friend mpfr_class const_pi(mpfr_rnd_t rnd);
     friend mpfr_class const_euler(mpfr_rnd_t rnd);
@@ -265,13 +294,13 @@ inline mpfr_class sqrt(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
     return result;
 }
 
-mpfr_class neg(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
+inline mpfr_class neg(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
     mpfr_neg(result.value, a.get_mpfr_t(), rnd);
     return result;
   }
 
-mpfr_class abs(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
+inline mpfr_class abs(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
     mpfr_abs(result.value, a.get_mpfr_t(), rnd);
     return result;

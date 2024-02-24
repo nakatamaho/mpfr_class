@@ -1,12 +1,14 @@
 #include <iostream>
+#include <iomanip>
 #include <cmath>           // For std::pow function
 #include "../mpfr_class.h" // Set the correct path to the mpfr_class definition header
 
 int main() {
     // Set initial values
+    mpfr::mpfr_class one(1.0);
     mpfr::mpfr_class two(2.0);
     mpfr::mpfr_class four(4.0);
-    mpfr::mpfr_class a(1.0), b(1.0 / mpfr::sqrt(two)), t(0.25), p(1.0);
+    mpfr::mpfr_class a(one), b(one / mpfr::sqrt(two)), t(0.25), p(one);
     mpfr::mpfr_class a_next, b_next, t_next, pi;
 
     std::cout << std::fixed << std::setprecision(50); // Set output to fixed-point notation with 50 digits of precision
