@@ -10,7 +10,8 @@ int main() {
     const long precision_bits = static_cast<long>(std::ceil(digits * bits_per_digit)); // Total bits for 50 digits
 
     // Set precision
-    mpfr::defaults::set_default_prec(precision_bits); // Apply this precision to all mpfr_class variables
+    mpfr::defaults::set_default_prec(precision_bits + 5); // Apply this precision to all mpfr_class variables
+    // unless +5, we got several last digits are inaccurate.
 
     // Set initial values for calculating exp(1)
     mpfr::mpfr_class x(1.0);    // Initialize x as 1 for calculating exp(1)
@@ -18,7 +19,7 @@ int main() {
     mpfr::mpfr_class term(1.0); // Initialize the first term of the series as 1
     int n = 1;                  // Counter for the series term number
 
-    // Calculate exp(1) using the Taylor series
+    // Calculate e using the Taylor series
     while (term > mpfr::mpfr_class(std::pow(10.0, -digits))) { // Continue until precision reaches 50 digits
         term *= x / mpfr::mpfr_class(n);                       // Calculate the next term in the series
         sum += term;                                           // Add the current term to the sum
@@ -26,7 +27,12 @@ int main() {
     }
 
     // Output the result with fixed point notation and set precision to 50 digits
-    std::cout << std::fixed << std::setprecision(digits) << "Calculated exp(1) using Taylor series: " << sum << std::endl;
+    std::cout << std::fixed << std::setprecision(digits) << "Calculated e using Taylor series: " << sum << std::endl;
+    // Calculate and output the value of e using MPFR's const_e function
+
+    mpfr::mpfr_class const_e;
+    const_e = mpfr::exp(mpfr::mpfr_class(1)); // Calculate the value of e using MPFR
+    std::cout << "Value of e using MPFR's const_e:  " << const_e << std::endl;
 
     return 0;
 }

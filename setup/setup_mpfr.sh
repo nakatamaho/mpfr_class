@@ -11,7 +11,7 @@ mkdir -p $WRKDIR
 cd $WRKDIR
 tar xvf $ARCHIVEDIR/mpfr-${VERSION}.tar.xz
 cd mpfr-${VERSION}
-./configure --with-gmp=/home/docker/mpfr_class/i/GMP-${GMP_VERSION}  --prefix=/home/docker/mpfr_class/i/MPFR-${VERSION}
+./configure --with-gmp=/home/docker/mpfr_class/i/GMP-${GMP_VERSION}  --prefix=/home/docker/mpfr_class/i/MPFR-${VERSION} --enable-decimal-float --enable-float128
 make -j`nproc`
 make check
 make install

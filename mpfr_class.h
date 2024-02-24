@@ -77,14 +77,10 @@ class mpfr_class {
     // Initialization using a constructor
     // move constructor
     mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
-    //    ___MPFR_CLASS_EXPLICIT___ mpfr_class(uintmax_t uj) noexcept {
-    //        mpfr_init(value);
-    //        mpfr_set_uj(value, uj, defaults::rnd);
-    //    }
-    //    ___MPFR_CLASS_EXPLICIT___ mpfr_class(intmax_t sj) noexcept {
-    //        mpfr_init(value);
-    //        mpfr_set_sj(value, sj, defaults::rnd);
-    //    }
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(int si) noexcept {
+        mpfr_init(value);
+        mpfr_set_si(value, si, defaults::rnd);
+    }
     ___MPFR_CLASS_EXPLICIT___ mpfr_class(float op) noexcept {
         mpfr_init(value);
         mpfr_set_flt(value, op, defaults::rnd);
@@ -198,7 +194,7 @@ class mpfr_class {
         mpfr_div(value, value, rhs.value, defaults::rnd);
         return *this;
     }
-    friend mpfr_class sqrt(const mpfr_class &a);
+    friend mpfr_class sqrt(const mpfr_class &a, mpfr_rnd_t rnd);
 
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.6 Comparison Functions
@@ -213,10 +209,21 @@ class mpfr_class {
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.7 Transcendental Functions
     ////////////////////////////////////////////////////////////////////////////////////////
-    friend mpfr_class log(const mpfr_class &a);
-    friend mpfr_class log_ui(unsigned long int op);
-    friend mpfr_class log2(const mpfr_class &a);
-    friend mpfr_class log10(const mpfr_class &a);
+    friend mpfr_class log(const mpfr_class &a, mpfr_rnd_t rnd);
+    friend mpfr_class log_ui(unsigned long int op, mpfr_rnd_t rnd);
+    friend mpfr_class log2(const mpfr_class &a, mpfr_rnd_t rnd);
+    friend mpfr_class log10(const mpfr_class &a, mpfr_rnd_t rnd);
+    friend mpfr_class log1p(const mpfr_class &op, mpfr_rnd_t rnd);
+    friend mpfr_class log2p1(const mpfr_class &op, mpfr_rnd_t rnd);
+    friend mpfr_class log10p1(const mpfr_class &op, mpfr_rnd_t rnd);
+    friend mpfr_class exp(const mpfr_class &op, mpfr_rnd_t rnd);
+    friend mpfr_class exp2(const mpfr_class &op, mpfr_rnd_t rnd);
+    friend mpfr_class exp10(const mpfr_class &op, mpfr_rnd_t rnd);
+    ///...///
+    friend mpfr_class const_log2(mpfr_rnd_t rnd);
+    friend mpfr_class const_pi(mpfr_rnd_t rnd);
+    friend mpfr_class const_euler(mpfr_rnd_t rnd);
+    friend mpfr_class const_catalan(mpfr_rnd_t rnd);
 
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.8 Input and Output Functions
@@ -250,36 +257,96 @@ std::ostream &operator<<(std::ostream &os, const mpfr_class &m) {
     return os;
 }
 
-mpfr_class sqrt(const mpfr_class &a) {
+inline mpfr_class sqrt(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
-    mpfr_sqrt(result.value, a.get_mpfr_t(), defaults::rnd);
+    mpfr_sqrt(result.value, a.get_mpfr_t(), rnd);
     return result;
 }
 
-mpfr_class log(const mpfr_class &a) {
+inline mpfr_class log(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
-    mpfr_log(result.value, a.value, defaults::rnd);
+    mpfr_log(result.value, a.value, rnd);
     return result;
 }
 
-mpfr_class log_ui(unsigned long int op) {
+inline mpfr_class log_ui(unsigned long int op, mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
-    mpfr_log_ui(result.value, op, defaults::rnd);
+    mpfr_log_ui(result.value, op, rnd);
     return result;
 }
 
-mpfr_class log2(const mpfr_class &a) {
+inline mpfr_class log2(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
-    mpfr_log2(result.value, a.value, defaults::rnd);
+    mpfr_log2(result.value, a.value, rnd);
     return result;
 }
 
-mpfr_class log10(const mpfr_class &a) {
+inline mpfr_class log10(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
-    mpfr_log10(result.value, a.value, defaults::rnd);
+    mpfr_log10(result.value, a.value, rnd);
+    return result;
+}
+inline mpfr_class log1p(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_log1p(result.value, op.value, rnd);
     return result;
 }
 
+inline mpfr_class log2p1(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_log2p1(result.value, op.value, rnd);
+    return result;
+}
+
+inline mpfr_class log10p1(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_log10p1(result.value, op.value, rnd);
+    return result;
+}
+
+inline mpfr_class exp(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_exp(result.value, op.value, rnd);
+    return result;
+}
+
+inline mpfr_class exp2(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_exp2(result.value, op.value, rnd);
+    return result;
+}
+
+inline mpfr_class exp10(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_exp10(result.value, op.value, rnd);
+    return result;
+}
+
+///...///
+
+inline mpfr_class const_log2(mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_const_log2(result.value, rnd);
+    return result;
+}
+
+inline mpfr_class const_pi(mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_const_pi(result.value, rnd);
+    return result;
+}
+
+inline mpfr_class const_euler(mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_const_euler(result.value, rnd);
+    return result;
+}
+
+inline mpfr_class const_catalan(mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_const_catalan(result.value, rnd);
+    return result;
+}
 } // namespace mpfr
 
 mpfr_prec_t mpfr::defaults::prec;
