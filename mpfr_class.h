@@ -468,21 +468,278 @@ inline mpfr_class ui_pow(unsigned long int op1, const mpfr_class &op2, mpfr_rnd_
     mpfr_ui_pow(result.value, op1, op2.value, rnd);
     return result;
 }
-
-///...///
-
+inline mpfr_class cos(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_cos(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class sin(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_sin(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class tan(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_tan(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class cosu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_cosu(result.value, op.value, u, rnd);
+    return result;
+}
+inline mpfr_class sinu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_sinu(result.value, op.value, u, rnd);
+    return result;
+}
+inline mpfr_class tanu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_tanu(result.value, op.value, u, rnd);
+    return result;
+}
+inline mpfr_class cospi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_cospi(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class sinpi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_sinpi(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class tanpi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_tanpi(result.value, op.value, rnd);
+    return result;
+}
+void sin_cos(mpfr_class &sop, mpfr_class &cop, const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) { mpfr_sin_cos(sop.value, cop.value, op.value, rnd); }
+inline mpfr_class sec(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_sec(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class csc(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_csc(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class cot(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_cot(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class acos(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_acos(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class asin(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_asin(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class acosu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_acosu(result.value, op.value, u, rnd);
+    return result;
+}
+inline mpfr_class asinu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_asinu(result.value, op.value, u, rnd);
+    return result;
+}
+inline mpfr_class atanu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_atanu(result.value, op.value, u, rnd);
+    return result;
+}
+inline mpfr_class acospi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_acospi(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class asinpi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_asinpi(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class atanpi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_atanpi(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class atan2(const mpfr_class &y, const mpfr_class &x, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_atan2(result.value, y.value, x.value, rnd);
+    return result;
+}
+inline mpfr_class atan2u(const mpfr_class &y, const mpfr_class &x, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_atan2u(result.value, y.value, x.value, u, rnd);
+    return result;
+}
+inline mpfr_class atan2pi(const mpfr_class &y, const mpfr_class &x, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_atan2pi(result.value, y.value, x.value, rnd);
+    return result;
+}
+inline mpfr_class cosh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_cosh(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class sinh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_sinh(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class tanh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_tanh(result.value, op.value, rnd);
+    return result;
+}
+void sinh_cosh(mpfr_class &sop, mpfr_class &cop, const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) { mpfr_sinh_cosh(sop.value, cop.value, op.value, rnd); }
+inline mpfr_class sech(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_sech(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class csch(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_csch(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class coth(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_coth(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class acosh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_acosh(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class asinh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_asinh(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class atanh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_atanh(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class eint(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_eint(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class li2(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_li2(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class beta(const mpfr_class &op1, const mpfr_class &op2, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_beta(result.value, op1.value, op2.value, rnd);
+    return result;
+}
+inline mpfr_class gamma(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_gamma(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class gamma_inc(const mpfr_class &op, const mpfr_class &op2, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_gamma_inc(result.value, op.value, op2.value, rnd);
+    return result;
+}
+inline mpfr_class lngamma(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_lngamma(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class lgamma(const mpfr_class &op, int &signp, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_lgamma(result.value, &signp, op.value, rnd);
+    return result;
+}
+inline mpfr_class digamma(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_digamma(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class zeta(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_zeta(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class zeta_ui(unsigned long int op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_zeta_ui(result.value, op, rnd);
+    return result;
+}
+inline mpfr_class erf(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_erf(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class erfc(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_erfc(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class j0(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_j0(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class j1(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_j1(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class jn(long int n, const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_jn(result.value, n, op.value, rnd);
+    return result;
+}
+inline mpfr_class y0(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_y0(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class y1(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_y1(result.value, op.value, rnd);
+    return result;
+}
+inline mpfr_class yn(long int n, const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_yn(result.value, n, op.value, rnd);
+    return result;
+}
+inline mpfr_class agm(const mpfr_class &op1, const mpfr_class &op2, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_agm(result.value, op1.value, op2.value, rnd);
+    return result;
+}
+inline mpfr_class ai(const mpfr_class &x, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_ai(result.value, x.value, rnd);
+    return result;
+}
 inline mpfr_class const_log2(mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
     mpfr_const_log2(result.value, rnd);
     return result;
 }
-
 inline mpfr_class const_pi(mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
     mpfr_const_pi(result.value, rnd);
     return result;
 }
-
 inline mpfr_class const_euler(mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
     mpfr_const_euler(result.value, rnd);
