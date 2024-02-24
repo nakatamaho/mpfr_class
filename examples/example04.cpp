@@ -9,17 +9,21 @@ int main() {
     mpfr::defaults::set_default_prec(bit_precision);
 
     // Initialization and precision setting
-    mpfr::mpfr_class x(1.0);   // initial guess
+    mpfr::mpfr_class x(1.0); // initial guess
+    mpfr::mpfr_class prev_x;
     mpfr::mpfr_class two(2.0); // Constant 2
 
     std::cout << std::fixed << std::setprecision(decimal_precision); // Set output to fixed point notation with desired digits
 
     std::cout << "Calculating sqrt(2) in " << decimal_precision << " decimal precision" << std::endl;
     // Calculating sqrt(2) using Newton's method
-    for (int i = 0; i < 10; ++i) { // For example, calculate with 10 iterations
-        x = (x + two / x) / two;   // x_{n+1} = (x_n + 2 / x_n) / 2
-        std::cout << "Iteration" << std::setw(14) << i + 1 << ": " << x << std::endl;
-    }
+    int iteration = 0;
+    do {
+        prev_x = x;              // Store current x value for comparison
+        x = (x + two / x) / two; // Newton's method formula
+        std::cout << "Iteration" << std::setw(14) << iteration + 1 << ": " << x << std::endl;
+        iteration++;
+    } while (mpfr::abs(x - prev_x) > mpfr::mpfr_class(pow(10, -decimal_precision))); // Continue until convergence
 
     // Comparison with mpfr::sqrt
     mpfr::mpfr_class sqrt2 = mpfr::sqrt(two); // Calculate sqrt(2) using MPFR

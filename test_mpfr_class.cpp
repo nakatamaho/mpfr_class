@@ -492,6 +492,23 @@ void testOutputOperator() {
     assert(oss.str() == "1.23e+08");
 }
 
+void testNeg() {
+    mpfr_class a(-3.5);
+    mpfr_class result = neg(a);
+    mpfr_class expected = "3.5";
+    assert(result == expected);
+    std::cout << "neg test passed." << std::endl;
+}
+
+void testAbs() {
+    mpfr_class a(-3.5);
+    mpfr_class c = abs(a);
+    mpfr_class expected = "3.5";
+    mpfr_class result = abs(a);
+    assert(result == expected);
+    std::cout << "abs test passed." << std::endl;
+}
+
 int main() {
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.1 Initialization Functions
@@ -507,6 +524,10 @@ int main() {
     testEqualityDifferentValue();
     testSetAndGetPrec();
     testSqrt();
+
+    testNeg();
+    testAbs();
+
     testLog();
     testLog10();
     testLog2();

@@ -195,6 +195,8 @@ class mpfr_class {
         return *this;
     }
     friend mpfr_class sqrt(const mpfr_class &a, mpfr_rnd_t rnd);
+    friend mpfr_class neg(const mpfr_class &a, mpfr_rnd_t rnd);
+    friend mpfr_class abs(const mpfr_class &a, mpfr_rnd_t rnd);
 
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.6 Comparison Functions
@@ -260,6 +262,18 @@ std::ostream &operator<<(std::ostream &os, const mpfr_class &m) {
 inline mpfr_class sqrt(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
     mpfr_sqrt(result.value, a.get_mpfr_t(), rnd);
+    return result;
+}
+
+mpfr_class neg(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_neg(result.value, a.get_mpfr_t(), rnd);
+    return result;
+  }
+
+mpfr_class abs(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_abs(result.value, a.get_mpfr_t(), rnd);
     return result;
 }
 
@@ -347,6 +361,7 @@ inline mpfr_class const_catalan(mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_const_catalan(result.value, rnd);
     return result;
 }
+
 } // namespace mpfr
 
 mpfr_prec_t mpfr::defaults::prec;
