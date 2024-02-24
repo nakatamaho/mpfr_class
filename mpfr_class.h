@@ -436,7 +436,23 @@ inline mpfr_class pow_si(const mpfr_class &op1, long int op2, mpfr_rnd_t rnd = d
     mpfr_pow_si(result.value, op1.value, op2, rnd);
     return result;
 }
-
+/*
+inline mpfr_class pow_uj(const mpfr_class &op1, uintmax_t op2, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_pow_uj(result.value, op1.value, op2, rnd);
+    return result;
+}
+inline mpfr_class pow_sj(const mpfr_class &op1, intmax_t op2, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_pow_sj(result.value, op1.value, op2, rnd);
+    return result;
+}
+inline mpfr_class pown(const mpfr_class &op1, intmax_t n, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class result;
+    mpfr_pown(result.value, op1.value, n, rnd);
+    return result;
+}
+*/
 inline mpfr_class pow_z(const mpfr_class &op1, const mpz_t op2, mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class result;
     mpfr_pow_z(result.value, op1.value, op2, rnd);
