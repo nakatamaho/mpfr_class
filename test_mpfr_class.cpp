@@ -337,7 +337,7 @@ void testLog2p1() {
 void testLog10p1() {
     mpfr_class a("9.0");
     mpfr_class result = log10p1(a);
-    std::string expected = "1.0"; // Exact value for log10p1(9)
+    std::string expected = "1.0000000000"; // Exact value for log10p1(9)
     assert(IsMpfrEquals(result, expected.c_str()));
     std::cout << "Log10p1 tests passed." << std::endl;
 }
@@ -356,7 +356,7 @@ void testExp() {
 void testExp2() {
     mpfr_class a("4.0");
     mpfr_class result = exp2(a);
-    std::string expected = "16.0"; // Exact value for 2^4
+    std::string expected = "16.0000000000"; // Exact value for 2^4
     assert(IsMpfrEquals(result, expected.c_str()));
 
     std::cout << "Exp2 tests passed." << std::endl;
@@ -366,7 +366,7 @@ void testExp2() {
 void testExp10() {
     mpfr_class a("2.0");
     mpfr_class result = exp10(a);
-    std::string expected = "100.0"; // Exact value for 10^2
+    std::string expected = "100.0000000000"; // Exact value for 10^2
     assert(IsMpfrEquals(result, expected.c_str()));
 
     std::cout << "Exp10 tests passed." << std::endl;
