@@ -5,7 +5,7 @@ INCLUDES = -I/home/docker/mpfr_class/i/GMP-6.3.0/include -I/home/docker/mpfr_cla
 
 TARGET = test_mpfr_class
 EXAMPLES_DIR = examples
-EXAMPLES = $(addprefix $(EXAMPLES_DIR)/,example01 example02 example03 example04 example05 example06 example07)
+EXAMPLES = $(addprefix $(EXAMPLES_DIR)/,example01 example02 example03 example04 example05 example06 example07 example08)
 
 SOURCES = test_mpfr_class.cpp
 HEADERS = mpfr_class.h
