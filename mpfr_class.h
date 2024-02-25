@@ -93,10 +93,10 @@ class mpfr_class {
         mpfr_init(value);
         mpfr_set_ld(value, op, defaults::rnd);
     }
-    ___MPFR_CLASS_EXPLICIT___ mpfr_class(_Float128 op) noexcept {
-        mpfr_init(value);
-        mpfr_set_float128(value, op, defaults::rnd);
-    }
+  //    ___MPFR_CLASS_EXPLICIT___ mpfr_class(_Float128 op) noexcept {
+  //        mpfr_init(value);
+  //        mpfr_set_float128(value, op, defaults::rnd);
+  //    }
     ___MPFR_CLASS_EXPLICIT___ mpfr_class(const mpz_t op) noexcept {
         mpfr_init(value);
         mpfr_set_z(value, op, defaults::rnd);

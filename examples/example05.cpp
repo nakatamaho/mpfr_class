@@ -1,3 +1,5 @@
+// calculation of pi using Gauss-Legendre algorithm
+
 #include <iostream>
 #include <iomanip>
 #include <cmath>           // For std::pow function
@@ -46,7 +48,7 @@ int main() {
     std::cout << "Converged after " << iteration << " iterations." << std::endl;
     // Comparison with mpfr::sqrt
     mpfr::mpfr_class _pi = mpfr::const_pi(); // Calculate const_pi() using MPFR
-    std::cout << "Result by this calculation:  " <<  pi << std::endl;
+    std::cout << "Result by this calculation:  " << pi << std::endl;
     std::cout << "Result using mpfr::const_pi: " << _pi << std::endl;
 
     return 0;

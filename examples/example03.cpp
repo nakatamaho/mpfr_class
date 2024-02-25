@@ -1,3 +1,4 @@
+// calculation of e
 #include <iostream>
 #include <iomanip>
 #include <cmath>           // For std::log2 function
