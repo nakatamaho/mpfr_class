@@ -7,7 +7,7 @@ void calculate_sequence(int prec) {
     mpfr::defaults::set_default_prec(prec);
     mpfr::mpfr_class v1(2), v2(-4), vn, diff;
     int m = 10000;
-    const mpfr::mpfr_class eps("1e-16");
+    const mpfr::mpfr_class eps("1e-64");
     std::cout.precision(50);
     bool hasConverged = false;
 
@@ -18,7 +18,7 @@ void calculate_sequence(int prec) {
 
         if (diff < eps) {
             hasConverged = true;
-            std::cout << "Sequence has converged at v" << n << std::endl;
+            std::cout << "Sequence has converged at v" << n << " using precicision: " << prec << " bits" << std::endl;
             std::cout << "correct limit is 6" << std::endl;
         }
         v1 = v2;
@@ -32,6 +32,7 @@ int main() {
     calculate_sequence(113);
     calculate_sequence(256);
     calculate_sequence(2048);
+    calculate_sequence(4096);
 
     return 0;
 }
