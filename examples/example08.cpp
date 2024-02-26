@@ -19,7 +19,7 @@ void calculate_sequence(int prec) {
         if (diff < eps) {
             hasConverged = true;
             std::cout << "Sequence has converged at v" << n << " using precicision: " << prec << " bits" << std::endl;
-            std::cout << "correct limit is 6" << std::endl;
+            std::cout << "Note that correct limit is 6." << std::endl;
         }
         v1 = v2;
         v2 = vn;
