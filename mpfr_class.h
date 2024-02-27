@@ -54,13 +54,15 @@ class defaults {
     ////////////////////////////////////////////////////////////////////////////////////////
     static inline mpfr_prec_t get_default_prec() { return mpfr_get_default_prec(); }
     static inline void set_default_prec(const mpfr_prec_t prec) { mpfr_set_default_prec(prec); }
-    static inline mpfr_rnd_t get_default_rounding_mode() { return mpfr_get_default_rounding_mode(); }
-    static inline void set_default_rounding_mode(const mpfr_rnd_t r = MPFR_RNDN) { mpfr_set_default_rounding_mode(r); }
     static inline mpfr_prec_t get_default_base() { return base; }
     static inline void set_default_base(const int _base) { base = _base; }
-
     ////////////////////////////////////////////////////////////////////////////////////////
-    // 5.13 Exception Related Functions
+    // 5.11 Rounding-Related Functions (part II)
+    ////////////////////////////////////////////////////////////////////////////////////////
+    static inline mpfr_rnd_t get_default_rounding_mode() { return mpfr_get_default_rounding_mode(); }
+    static inline void set_default_rounding_mode(const mpfr_rnd_t r = MPFR_RNDN) { mpfr_set_default_rounding_mode(r); }
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.13 Exception Related Functions (part II)
     ////////////////////////////////////////////////////////////////////////////////////////
     static inline mpfr_exp_t get_emin() { return mpfr_get_emin(); }
     static inline mpfr_exp_t get_emax() { return mpfr_get_emax(); }
@@ -445,6 +447,9 @@ class mpfr_class {
     friend std::ostream &operator<<(std::ostream &os, const mpfr_class &m);
     ////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.9 Formatted Output Functions
+    ////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////
     // 5.10 Integer and Remainder Related Functions
     ////////////////////////////////////////////////////////////////////////////////////////
     // int mpfr_ceil (mpfr_t rop, mpfr_t op)
@@ -465,6 +470,40 @@ class mpfr_class {
     // int mpfr_remainder (mpfr_t r, mpfr_t x, mpfr_t y, mpfr_rnd_t rnd)
     // int mpfr_remquo (mpfr_t r, long int* q, mpfr_t x, mpfr_t y, mpfr_rnd_t rnd)
     // int mpfr_integer_p (mpfr_t op)
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.11 Integer and Remainder Related Functions
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // int mpfr_prec_round (mpfr_t x, mpfr_prec_t prec, mpfr_rnd_t rnd)
+    // int mpfr_can_round (mpfr_t b, mpfr_exp_t err, mpfr_rnd_t rnd1, mpfr_rnd_t rnd2, mpfr_prec_t prec)
+    // mpfr_prec_t mpfr_min_prec (mpfr_t x)
+    // const char * mpfr_print_rnd_mode (mpfr_rnd_t rnd)
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.12 Miscellaneous Functions
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // void mpfr_nexttoward (mpfr_t x, mpfr_t y)
+    // void mpfr_nextabove (mpfr_t x)
+    // void mpfr_nextbelow (mpfr_t x)
+    // int mpfr_min (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_max (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_urandomb (mpfr_t rop, gmp_randstate_t state)
+    // int mpfr_urandom (mpfr_t rop, gmp_randstate_t state, mpfr_rnd_t rnd)
+    // int mpfr_nrandom (mpfr_t rop1, gmp_randstate_t state, mpfr_rnd_t rnd)
+    // int mpfr_grandom (mpfr_t rop1, mpfr_t rop2, gmp_randstate_t state, mpfr_rnd_t rnd)
+    // int mpfr_erandom (mpfr_t rop1, gmp_randstate_t state, mpfr_rnd_t rnd)
+    // mpfr_exp_t mpfr_get_exp (mpfr_t x)
+    // int mpfr_set_exp (mpfr_t x, mpfr_exp_t e)
+    // int mpfr_signbit (mpfr_t op)
+    // int mpfr_setsign (mpfr_t rop, mpfr_t op, int s, mpfr_rnd_t rnd)
+    // int mpfr_copysign (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // const char * mpfr_get_version (void)
+    // const char * mpfr_get_patches (void)
+    // int mpfr_buildopt_tls_p (void)
+    // int mpfr_buildopt_float128_p (void)
+    // int mpfr_buildopt_decimal_p (void)
+    // int mpfr_buildopt_gmpinternals_p (void)
+    // int mpfr_buildopt_sharedcache_p (void)
+    // const char * mpfr_buildopt_tune_case (void)
     mpfr_srcptr get_mpfr_t() const { return value; }
 
   private:
