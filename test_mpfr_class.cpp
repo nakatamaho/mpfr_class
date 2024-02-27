@@ -507,6 +507,36 @@ void testAbs() {
     std::cout << "abs test passed." << std::endl;
 }
 
+void testemin_emax() {
+    auto emin = mpfr::defaults::get_emin();
+    auto emax = mpfr::defaults::get_emax();
+
+    std::cout << "Default emin: " << emin << std::endl;
+    std::cout << "Default emax: " << emax << std::endl;
+
+    auto emin_min = mpfr::defaults::get_emin_min();
+    auto emin_max = mpfr::defaults::get_emin_max();
+    auto emax_min = mpfr::defaults::get_emax_min();
+    auto emax_max = mpfr::defaults::get_emax_max();
+
+    std::cout << "Emin min: " << emin_min << std::endl;
+    std::cout << "Emin max: " << emin_max << std::endl;
+    std::cout << "Emax min: " << emax_min << std::endl;
+    std::cout << "Emax max: " << emax_max << std::endl;
+
+    mpfr::defaults::set_emin(mpfr_get_emin_min());
+    mpfr::defaults::set_emax(mpfr_get_emax_max());
+
+    emin = mpfr::defaults::get_emin();
+    emax = mpfr::defaults::get_emax();
+
+    std::cout << "New emin: " << emin << std::endl;
+    std::cout << "New emax: " << emax << std::endl;
+
+    //    mpfr::defaults::set_default_prec = 53;
+    //    mpfr::set_emin = -1073;
+    //    mpfr::set_emax = 1024;
+}
 int main() {
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.1 Initialization Functions
@@ -559,6 +589,10 @@ int main() {
     ////////////////////////////////////////////////////////////////////////////////////////
     testOutputOperator();
 
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.13
+    ////////////////////////////////////////////////////////////////////////////////////////
+    testemin_emax();
     std::cout << "All tests passed." << std::endl;
 
     return 0;

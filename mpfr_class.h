@@ -35,6 +35,7 @@
 #include <mpfr.h>
 #include <iostream>
 #include <utility>
+#include <limits>
 
 #define ___MPFR_CLASS_EXPLICIT___ explicit
 
@@ -45,16 +46,30 @@ class defaults {
     static mpfr_prec_t prec;
     static mpfr_rnd_t rnd;
     static int base;
+    static mpfr_exp_t emin;
+    static mpfr_exp_t emax;
 
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.1 Initialization Functions (part II)
     ////////////////////////////////////////////////////////////////////////////////////////
     static inline mpfr_prec_t get_default_prec() { return mpfr_get_default_prec(); }
-    static void set_default_prec(mpfr_prec_t prec) { mpfr_set_default_prec(prec); }
+    static inline void set_default_prec(const mpfr_prec_t prec) { mpfr_set_default_prec(prec); }
     static inline mpfr_rnd_t get_default_rounding_mode() { return mpfr_get_default_rounding_mode(); }
-    static void set_default_rounding_mode(mpfr_rnd_t r = MPFR_RNDN) { mpfr_set_default_rounding_mode(r); }
+    static inline void set_default_rounding_mode(const mpfr_rnd_t r = MPFR_RNDN) { mpfr_set_default_rounding_mode(r); }
     static inline mpfr_prec_t get_default_base() { return base; }
-    static void set_default_base(int _base) { base = _base; }
+    static inline void set_default_base(const int _base) { base = _base; }
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.13 Exception Related Functions
+    ////////////////////////////////////////////////////////////////////////////////////////
+    static inline mpfr_exp_t get_emin() { return mpfr_get_emin(); }
+    static inline mpfr_exp_t get_emax() { return mpfr_get_emax(); }
+    static inline int set_emin(const mpfr_exp_t exp) { return mpfr_set_emin(exp); }
+    static inline int set_emax(const mpfr_exp_t exp) { return mpfr_set_emax(exp); }
+    static inline mpfr_exp_t get_emin_min(void) { return mpfr_get_emin_min(); }
+    static inline mpfr_exp_t get_emin_max(void) { return mpfr_get_emin_max(); }
+    static inline mpfr_exp_t get_emax_min(void) { return mpfr_get_emax_min(); }
+    static inline mpfr_exp_t get_emax_max(void) { return mpfr_get_emax_max(); }
 };
 
 class mpfr_class {
@@ -64,32 +79,55 @@ class mpfr_class {
     ////////////////////////////////////////////////////////////////////////////////////////
     mpfr_class() { mpfr_init(value); }
     ~mpfr_class() { mpfr_clear(value); }
-    void set_prec(mpfr_prec_t prec) { mpfr_set_prec(value, prec); }
+    void set_prec(const mpfr_prec_t prec) { mpfr_set_prec(value, prec); }
     mpfr_prec_t get_prec() const { return mpfr_get_prec(value); }
-
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.2 Assignment Functions
     ////////////////////////////////////////////////////////////////////////////////////////
-    mpfr_class(const mpfr_class &other) {
-        mpfr_init2(value, mpfr_get_prec(other.value));
-        mpfr_set(value, other.value, defaults::rnd);
+    mpfr_class(mpfr_class &&op) noexcept { mpfr_swap(value, op.value); }
+    mpfr_class(const mpfr_class &op) {
+        mpfr_init2(value, mpfr_get_prec(op.value));
+        mpfr_set(value, op.value, defaults::rnd);
     }
-    // Initialization using a constructor
-    // move constructor
-    mpfr_class(mpfr_class &&other) noexcept { mpfr_swap(value, other.value); }
-    ___MPFR_CLASS_EXPLICIT___ mpfr_class(int si) noexcept {
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const mpfr_t &op) {
+        mpfr_prec_t _prec;
+        _prec = mpfr_get_prec(op);
+        mpfr_init2(value, _prec);
+        mpfr_set(value, op, defaults::rnd);
+    }
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const unsigned int op) noexcept {
         mpfr_init(value);
-        mpfr_set_si(value, si, defaults::rnd);
+        mpfr_set_ui(value, (unsigned long int)op, defaults::rnd);
     }
-    ___MPFR_CLASS_EXPLICIT___ mpfr_class(float op) noexcept {
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const int op) noexcept {
+        mpfr_init(value);
+        mpfr_set_si(value, (long int)op, defaults::rnd);
+    }
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const unsigned long int op) noexcept {
+        mpfr_init(value);
+        mpfr_set_ui(value, op, defaults::rnd);
+    }
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const long int op) noexcept {
+        mpfr_init(value);
+        mpfr_set_si(value, op, defaults::rnd);
+    }
+    //    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const uintmax_t op) noexcept {
+    //        mpfr_init(value);
+    //        mpfr_set_uj(value, op, defaults::rnd);
+    //    }
+    //    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const intmax_t op) noexcept {
+    //        mpfr_init(value);
+    //        mpfr_set_sj(value, op, defaults::rnd);
+    //    }
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const float op) noexcept {
         mpfr_init(value);
         mpfr_set_flt(value, op, defaults::rnd);
     }
-    ___MPFR_CLASS_EXPLICIT___ mpfr_class(double d) noexcept {
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const double op) noexcept {
         mpfr_init(value);
-        mpfr_set_d(value, d, defaults::rnd);
+        mpfr_set_d(value, op, defaults::rnd);
     }
-    ___MPFR_CLASS_EXPLICIT___ mpfr_class(long double op) noexcept {
+    ___MPFR_CLASS_EXPLICIT___ mpfr_class(const long double op) noexcept {
         mpfr_init(value);
         mpfr_set_ld(value, op, defaults::rnd);
     }
@@ -109,40 +147,39 @@ class mpfr_class {
         mpfr_init(value);
         mpfr_set_f(value, op, defaults::rnd);
     }
-    mpfr_class(const char *str, int base = defaults::base, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class(const char *s, int base = defaults::base, mpfr_rnd_t rnd = defaults::rnd) {
         mpfr_init(value);
-        if (mpfr_set_str(value, str, base, rnd) != 0) {
-            std::cerr << "Error initializing mpfr_t from const char*: " << str << std::endl;
+        if (mpfr_set_str(value, s, base, rnd) != 0) {
+            std::cerr << "Error initializing mpfr_t from const char*: " << s << std::endl;
             throw std::runtime_error("Failed to initialize mpfr_t with given string.");
         }
     }
-    mpfr_class(const std::string &str, int base = defaults::base, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class(const std::string &s, int base = defaults::base, mpfr_rnd_t rnd = defaults::rnd) {
         mpfr_init(value);
-        if (mpfr_set_str(value, str.c_str(), base, rnd) != 0) {
-            std::cerr << "Error initializing mpfr_t from std::string: " << str << std::endl;
+        if (mpfr_set_str(value, s.c_str(), base, rnd) != 0) {
+            std::cerr << "Error initializing mpfr_t from std::string: " << s << std::endl;
             throw std::runtime_error("Failed to initialize mpfr_t with given string.");
         }
     }
     // Initialization using assignment operator
-    // Copy-and-Swap Idiom; it does both the copy assignment operator and the move assignment operator.
-    mpfr_class &operator=(mpfr_class other) noexcept {
-        mpfr_swap(value, other.value);
+    mpfr_class &operator=(mpfr_class op) noexcept { // Copy-and-Swap Idiom; it does both the copy assignment and the move assignment.
+        mpfr_swap(value, op.value);
         return *this;
     }
-    mpfr_class &operator=(double d) noexcept {
-        mpfr_set_d(value, d, defaults::rnd);
+    mpfr_class &operator=(double op) noexcept {
+        mpfr_set_d(value, op, defaults::rnd);
         return *this;
     }
-    mpfr_class &operator=(const char *str) {
-        if (mpfr_set_str(value, str, defaults::base, defaults::rnd) != 0) {
+    mpfr_class &operator=(const char *s) {
+        if (mpfr_set_str(value, s, defaults::base, defaults::rnd) != 0) {
             std::cerr << "Error assigning mpfr_t from char:" << std::endl;
             throw std::runtime_error("Failed to initialize mpfr_t with given string.");
         }
         return *this;
     }
-    mpfr_class &operator=(const std::string &str) {
-        if (mpfr_set_str(value, str.c_str(), defaults::base, defaults::rnd) != 0) {
-            std::cerr << "Error assigning mpfr_t from string: " << str << std::endl;
+    mpfr_class &operator=(const std::string &s) {
+        if (mpfr_set_str(value, s.c_str(), defaults::base, defaults::rnd) != 0) {
+            std::cerr << "Error assigning mpfr_t from string: " << s << std::endl;
             throw std::runtime_error("Failed to initialize mpfr_t with given string.");
         }
         return *this;
@@ -154,41 +191,68 @@ class mpfr_class {
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.4 Conversion Functions
     ////////////////////////////////////////////////////////////////////////////////////////
-
+    // float mpfr_get_flt (mpfr_t op, mpfr_rnd_t rnd)
+    // double mpfr_get_d (mpfr_t op, mpfr_rnd_t rnd)
+    // long double mpfr_get_ld (mpfr_t op, mpfr_rnd_t rnd)
+    //_Float128 mpfr_get_float128 (mpfr_t op, mpfr_rnd_t rnd)
+    //_Decimal64 mpfr_get_decimal64 (mpfr_t op, mpfr_rnd_t rnd)
+    //_Decimal128 mpfr_get_decimal128 (mpfr_t op, mpfr_rnd_t rnd)
+    // long int mpfr_get_si (mpfr_t op, mpfr_rnd_t rnd)
+    // unsigned long int mpfr_get_ui (mpfr_t op, mpfr_rnd_t rnd)
+    // intmax_t mpfr_get_sj (mpfr_t op, mpfr_rnd_t rnd)
+    // uintmax_t mpfr_get_uj (mpfr_t op, mpfr_rnd_t rnd)
+    // double mpfr_get_d_2exp (long *exp, mpfr_t op, mpfr_rnd_t rnd)
+    // long double mpfr_get_ld_2exp (long *exp, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_frexp (mpfr_exp_t *exp, mpfr_t y, mpfr_t x, mpfr_rnd_t rnd)
+    // mpfr_exp_t mpfr_get_z_2exp (mpz_t rop, mpfr_t op)
+    // int mpfr_get_z (mpz_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // void mpfr_get_q (mpq_t rop, mpfr_t op)
+    // int mpfr_get_f (mpf_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // size_t mpfr_get_str_ndigits (int b, mpfr_prec_t p)
+    // char * mpfr_get_str (char *str, mpfr_exp_t *expptr, int base, size_t n, mpfr_t op, mpfr_rnd_t rnd)
+    // void mpfr_free_str (char *str)
+    // int mpfr_fits_ulong_p (mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_fits_slong_p (mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_fits_uint_p (mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_fits_sint_p (mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_fits_ushort_p (mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_fits_sshort_p (mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_fits_uintmax_p (mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_fits_intmax_p (mpfr_t op, mpfr_rnd_t rnd)
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.5 Arithmetic Functions
     ////////////////////////////////////////////////////////////////////////////////////////
     mpfr_class operator+(const mpfr_class &rhs) const {
-        mpfr_class result;
-        mpfr_add(result.value, value, rhs.value, defaults::rnd);
-        return result;
+        mpfr_class rop;
+        mpfr_add(rop.value, value, rhs.value, defaults::rnd);
+        return rop;
     }
     mpfr_class &operator+=(const mpfr_class &rhs) {
         mpfr_add(value, value, rhs.value, defaults::rnd);
         return *this;
     }
     mpfr_class operator*(const mpfr_class &rhs) const {
-        mpfr_class result;
-        mpfr_mul(result.value, this->value, rhs.value, defaults::rnd);
-        return result;
+        mpfr_class rop;
+        mpfr_mul(rop.value, this->value, rhs.value, defaults::rnd);
+        return rop;
     }
     mpfr_class &operator*=(const mpfr_class &rhs) {
         mpfr_mul(value, value, rhs.value, defaults::rnd);
         return *this;
     }
     mpfr_class operator-(const mpfr_class &rhs) const {
-        mpfr_class result;
-        mpfr_sub(result.value, this->value, rhs.value, defaults::rnd);
-        return result;
+        mpfr_class rop;
+        mpfr_sub(rop.value, this->value, rhs.value, defaults::rnd);
+        return rop;
     }
     mpfr_class &operator-=(const mpfr_class &rhs) {
         mpfr_sub(value, value, rhs.value, defaults::rnd);
         return *this;
     }
     mpfr_class operator/(const mpfr_class &rhs) const {
-        mpfr_class result;
-        mpfr_div(result.value, this->value, rhs.value, defaults::rnd);
-        return result;
+        mpfr_class rop;
+        mpfr_div(rop.value, this->value, rhs.value, defaults::rnd);
+        return rop;
     }
     mpfr_class &operator/=(const mpfr_class &rhs) {
         mpfr_div(value, value, rhs.value, defaults::rnd);
@@ -197,24 +261,107 @@ class mpfr_class {
     friend mpfr_class sqrt(const mpfr_class &a, mpfr_rnd_t rnd);
     friend mpfr_class neg(const mpfr_class &a, mpfr_rnd_t rnd);
     friend mpfr_class abs(const mpfr_class &a, mpfr_rnd_t rnd);
-
+    friend mpfr_class mul_2ui(const mpfr_class &op1, unsigned long int op2, mpfr_rnd_t rnd);
+    friend mpfr_class mul_2si(const mpfr_class &op1, long int op2, mpfr_rnd_t rnd);
+    friend mpfr_class div_2ui(const mpfr_class &op1, unsigned long int op2, mpfr_rnd_t rnd);
+    friend mpfr_class div_2si(const mpfr_class &op1, long int op2, mpfr_rnd_t rnd);
+    // int mpfr_add (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_add_ui (mpfr_t rop, mpfr_t op1, unsigned long int op2, mpfr_rnd_t rnd)
+    // int mpfr_add_si (mpfr_t rop, mpfr_t op1, long int op2, mpfr_rnd_t rnd)
+    // int mpfr_add_d (mpfr_t rop, mpfr_t op1, double op2, mpfr_rnd_t rnd)
+    // int mpfr_add_z (mpfr_t rop, mpfr_t op1, mpz_t op2, mpfr_rnd_t rnd)
+    // int mpfr_add_q (mpfr_t rop, mpfr_t op1, mpq_t op2, mpfr_rnd_t rnd)
+    // int mpfr_sub (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_ui_sub (mpfr_t rop, unsigned long int op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_sub_ui (mpfr_t rop, mpfr_t op1, unsigned long int op2, mpfr_rnd_t rnd)
+    // int mpfr_si_sub (mpfr_t rop, long int op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_sub_si (mpfr_t rop, mpfr_t op1, long int op2, mpfr_rnd_t rnd)
+    // int mpfr_d_sub (mpfr_t rop, double op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_sub_d (mpfr_t rop, mpfr_t op1, double op2, mpfr_rnd_t rnd)
+    // int mpfr_z_sub (mpfr_t rop, mpz_t op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_sub_z (mpfr_t rop, mpfr_t op1, mpz_t op2, mpfr_rnd_t rnd)
+    // int mpfr_sub_q (mpfr_t rop, mpfr_t op1, mpq_t op2, mpfr_rnd_t rnd)
+    // int mpfr_mul (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_mul_ui (mpfr_t rop, mpfr_t op1, unsigned long int op2, mpfr_rnd_t rnd)
+    // int mpfr_mul_si (mpfr_t rop, mpfr_t op1, long int op2, mpfr_rnd_t rnd)
+    // int mpfr_mul_d (mpfr_t rop, mpfr_t op1, double op2, mpfr_rnd_t rnd)
+    // int mpfr_mul_z (mpfr_t rop, mpfr_t op1, mpz_t op2, mpfr_rnd_t rnd)
+    // int mpfr_mul_q (mpfr_t rop, mpfr_t op1, mpq_t op2, mpfr_rnd_t rnd)
+    // int mpfr_sqr (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_div (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_ui_div (mpfr_t rop, unsigned long int op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_div_ui (mpfr_t rop, mpfr_t op1, unsigned long int op2, mpfr_rnd_t rnd)
+    // int mpfr_si_div (mpfr_t rop, long int op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_div_si (mpfr_t rop, mpfr_t op1, long int op2, mpfr_rnd_t rnd)
+    // int mpfr_d_div (mpfr_t rop, double op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_div_d (mpfr_t rop, mpfr_t op1, double op2, mpfr_rnd_t rnd)
+    // int mpfr_div_z (mpfr_t rop, mpfr_t op1, mpz_t op2, mpfr_rnd_t rnd)
+    // int mpfr_div_q (mpfr_t rop, mpfr_t op1, mpq_t op2, mpfr_rnd_t rnd)
+    // int mpfr_sqrt (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_sqrt_ui (mpfr_t rop, unsigned long int op, mpfr_rnd_t rnd)
+    // int mpfr_rec_sqrt (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_cbrt (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_rootn_ui (mpfr_t rop, mpfr_t op, unsigned long int n, mpfr_rnd_t rnd)
+    // int mpfr_rootn_si (mpfr_t rop, mpfr_t op, long int n, mpfr_rnd_t rnd)
+    // int mpfr_root (mpfr_t rop, mpfr_t op, unsigned long int n, mpfr_rnd_t rnd)
+    // int mpfr_neg (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_abs (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_dim (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_rnd_t rnd)
+    // int mpfr_mul_2ui (mpfr_t rop, mpfr_t op1, unsigned long int op2, mpfr_rnd_t rnd)
+    // int mpfr_mul_2si (mpfr_t rop, mpfr_t op1, long int op2, mpfr_rnd_t rnd)
+    // int mpfr_div_2ui (mpfr_t rop, mpfr_t op1, unsigned long int op2, mpfr_rnd_t rnd)
+    // int mpfr_div_2si (mpfr_t rop, mpfr_t op1, long int op2, mpfr_rnd_t rnd)
+    // int mpfr_fac_ui (mpfr_t rop, unsigned long int op, mpfr_rnd_t rnd)
+    // int mpfr_fma (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_t op3, mpfr_rnd_t rnd)
+    // int mpfr_fms (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_t op3, mpfr_rnd_t rnd)
+    // int mpfr_fmma (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_t op3, mpfr_t op4, mpfr_rnd_t rnd)
+    // int mpfr_fmms (mpfr_t rop, mpfr_t op1, mpfr_t op2, mpfr_t op3, mpfr_t op4, mpfr_rnd_t rnd)
+    // int mpfr_hypot (mpfr_t rop, mpfr_t x, mpfr_t y, mpfr_rnd_t rnd)
+    // int mpfr_sum (mpfr_t rop, const mpfr_ptr tab[], unsigned long int n, mpfr_rnd_t rnd)
+    // int mpfr_dot (mpfr_t rop, const mpfr_ptr a[], const mpfr_ptr b[], unsigned long int n, mpfr_rnd_t rnd)
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.6 Comparison Functions
     ////////////////////////////////////////////////////////////////////////////////////////
-    friend inline bool operator==(const mpfr_class &lhs, const mpfr_class &rhs) { return mpfr_equal_p(lhs.value, rhs.value) != 0; }
-    friend inline bool operator!=(const mpfr_class &lhs, const mpfr_class &rhs) { return mpfr_lessgreater_p(lhs.value, rhs.value) != 0; }
-    friend inline bool operator<(const mpfr_class &lhs, const mpfr_class &rhs) { return mpfr_less_p(lhs.value, rhs.value) != 0; }
-    friend inline bool operator>(const mpfr_class &lhs, const mpfr_class &rhs) { return mpfr_greater_p(lhs.value, rhs.value) != 0; }
-    friend inline bool operator<=(const mpfr_class &lhs, const mpfr_class &rhs) { return mpfr_lessequal_p(lhs.value, rhs.value) != 0; }
-    friend inline bool operator>=(const mpfr_class &lhs, const mpfr_class &rhs) { return mpfr_greaterequal_p(lhs.value, rhs.value) != 0; }
-
+    friend inline bool operator==(const mpfr_class &op1, const mpfr_class &op2) { return mpfr_equal_p(op1.value, op2.value) != 0; }
+    friend inline bool operator!=(const mpfr_class &op1, const mpfr_class &op2) { return mpfr_lessgreater_p(op1.value, op2.value) != 0; }
+    friend inline bool operator<(const mpfr_class &op1, const mpfr_class &op2) { return mpfr_less_p(op1.value, op2.value) != 0; }
+    friend inline bool operator>(const mpfr_class &op1, const mpfr_class &op2) { return mpfr_greater_p(op1.value, op2.value) != 0; }
+    friend inline bool operator<=(const mpfr_class &op1, const mpfr_class &op2) { return mpfr_lessequal_p(op1.value, op2.value) != 0; }
+    friend inline bool operator>=(const mpfr_class &op1, const mpfr_class &op2) { return mpfr_greaterequal_p(op1.value, op2.value) != 0; }
+    bool is_nan() const { return mpfr_nan_p(value) != 0; }
+    bool is_inf() const { return mpfr_inf_p(value) != 0; }
+    // int mpfr_cmp (mpfr_t op1, mpfr_t op2)
+    // int mpfr_cmp_ui (mpfr_t op1, unsigned long int op2)
+    // int mpfr_cmp_si (mpfr_t op1, long int op2)
+    // int mpfr_cmp_d (mpfr_t op1, double op2)
+    // int mpfr_cmp_ld (mpfr_t op1, long double op2)
+    // int mpfr_cmp_z (mpfr_t op1, mpz_t op2)
+    // int mpfr_cmp_q (mpfr_t op1, mpq_t op2)
+    // int mpfr_cmp_f (mpfr_t op1, mpf_t op2)
+    // int mpfr_cmp_ui_2exp (mpfr_t op1, unsigned long int op2, mpfr_exp_t e)
+    // int mpfr_cmp_si_2exp (mpfr_t op1, long int op2, mpfr_exp_t e)
+    // int mpfr_cmpabs (mpfr_t op1, mpfr_t op2)
+    // int mpfr_cmpabs_ui (mpfr_t op1, unsigned long int op2)
+    // int mpfr_nan_p (mpfr_t op)
+    // int mpfr_inf_p (mpfr_t op)
+    // int mpfr_number_p (mpfr_t op)
+    // int mpfr_zero_p (mpfr_t op)
+    // int mpfr_regular_p (mpfr_t op)
+    // int mpfr_greater_p (mpfr_t op1, mpfr_t op2)
+    // int mpfr_greaterequal_p (mpfr_t op1, mpfr_t op2)
+    // int mpfr_less_p (mpfr_t op1, mpfr_t op2)
+    // int mpfr_lessequal_p (mpfr_t op1, mpfr_t op2)
+    // int mpfr_equal_p (mpfr_t op1, mpfr_t op2)
+    // int mpfr_lessgreater_p (mpfr_t op1, mpfr_t op2)
+    // int mpfr_unordered_p (mpfr_t op1, mpfr_t op2)
+    // int mpfr_total_order_p (mpfr_t x, mpfr_t y)
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.7 Transcendental Functions
     ////////////////////////////////////////////////////////////////////////////////////////
-    friend mpfr_class log(const mpfr_class &a, mpfr_rnd_t rnd);
+    friend mpfr_class log(const mpfr_class &op, mpfr_rnd_t rnd);
     friend mpfr_class log_ui(unsigned long int op, mpfr_rnd_t rnd);
-    friend mpfr_class log2(const mpfr_class &a, mpfr_rnd_t rnd);
-    friend mpfr_class log10(const mpfr_class &a, mpfr_rnd_t rnd);
+    friend mpfr_class log2(const mpfr_class &op, mpfr_rnd_t rnd);
+    friend mpfr_class log10(const mpfr_class &op, mpfr_rnd_t rnd);
     friend mpfr_class log1p(const mpfr_class &op, mpfr_rnd_t rnd);
     friend mpfr_class log2p1(const mpfr_class &op, mpfr_rnd_t rnd);
     friend mpfr_class log10p1(const mpfr_class &op, mpfr_rnd_t rnd);
@@ -292,15 +439,32 @@ class mpfr_class {
     friend mpfr_class const_pi(mpfr_rnd_t rnd);
     friend mpfr_class const_euler(mpfr_rnd_t rnd);
     friend mpfr_class const_catalan(mpfr_rnd_t rnd);
-
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.8 Input and Output Functions
     ////////////////////////////////////////////////////////////////////////////////////////
     friend std::ostream &operator<<(std::ostream &os, const mpfr_class &m);
     ////////////////////////////////////////////////////////////////////////////////////////
-    bool is_nan() const { return mpfr_nan_p(value) != 0; }
-    bool is_inf() const { return mpfr_inf_p(value) != 0; }
-
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // 5.10 Integer and Remainder Related Functions
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // int mpfr_ceil (mpfr_t rop, mpfr_t op)
+    // int mpfr_floor (mpfr_t rop, mpfr_t op)
+    // int mpfr_round (mpfr_t rop, mpfr_t op)
+    // int mpfr_roundeven (mpfr_t rop, mpfr_t op)
+    // int mpfr_trunc (mpfr_t rop, mpfr_t op)
+    // int mpfr_rint_ceil (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_rint_floor (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_rint_round (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_rint_roundeven (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_rint_trunc (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_frac (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_modf (mpfr_t iop, mpfr_t fop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_fmod (mpfr_t r, mpfr_t x, mpfr_t y, mpfr_rnd_t rnd)
+    // int mpfr_fmod_ui (mpfr_t r, mpfr_t x, unsigned long int y, mpfr_rnd_t rnd)
+    // int mpfr_fmodquo (mpfr_t r, long int* q, mpfr_t x, mpfr_t y, mpfr_rnd_t rnd)
+    // int mpfr_remainder (mpfr_t r, mpfr_t x, mpfr_t y, mpfr_rnd_t rnd)
+    // int mpfr_remquo (mpfr_t r, long int* q, mpfr_t x, mpfr_t y, mpfr_rnd_t rnd)
+    // int mpfr_integer_p (mpfr_t op)
     mpfr_srcptr get_mpfr_t() const { return value; }
 
   private:
@@ -324,435 +488,520 @@ std::ostream &operator<<(std::ostream &os, const mpfr_class &m) {
 
     return os;
 }
-
-inline mpfr_class sqrt(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_sqrt(result.value, a.get_mpfr_t(), rnd);
-    return result;
+inline mpfr_class sqrt(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class rop;
+    mpfr_sqrt(rop.value, op.get_mpfr_t(), rnd);
+    return rop;
 }
-
-inline mpfr_class neg(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_neg(result.value, a.get_mpfr_t(), rnd);
-    return result;
+inline mpfr_class neg(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class rop;
+    mpfr_neg(rop.value, op.get_mpfr_t(), rnd);
+    return rop;
 }
-
-inline mpfr_class abs(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_abs(result.value, a.get_mpfr_t(), rnd);
-    return result;
+inline mpfr_class abs(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class rop;
+    mpfr_abs(rop.value, op.get_mpfr_t(), rnd);
+    return rop;
 }
-
-inline mpfr_class log(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_log(result.value, a.value, rnd);
-    return result;
+inline mpfr_class mul_2ui(const mpfr_class &op1, unsigned long int op2, mpfr_rnd_t rnd) {
+    mpfr_class rop;
+    mpfr_mul_2ui(rop.value, op1.value, op2, rnd);
+    return rop;
 }
-
+inline mpfr_class mul_2si(const mpfr_class &op1, long int op2, mpfr_rnd_t rnd) {
+    mpfr_class rop;
+    mpfr_mul_2si(rop.value, op1.value, op2, rnd);
+    return rop;
+}
+inline mpfr_class div_2ui(const mpfr_class &op1, unsigned long int op2, mpfr_rnd_t rnd) {
+    mpfr_class rop;
+    mpfr_div_2ui(rop.value, op1.value, op2, rnd);
+    return rop;
+}
+inline mpfr_class div_2si(const mpfr_class &op1, long int op2, mpfr_rnd_t rnd) {
+    mpfr_class rop;
+    mpfr_div_2si(rop.value, op1.value, op2, rnd);
+    return rop;
+}
+inline mpfr_class log(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+    mpfr_class rop;
+    mpfr_log(rop.value, op.value, rnd);
+    return rop;
+}
 inline mpfr_class log_ui(unsigned long int op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_log_ui(result.value, op, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_log_ui(rop.value, op, rnd);
+    return rop;
 }
-
 inline mpfr_class log2(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_log2(result.value, a.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_log2(rop.value, a.value, rnd);
+    return rop;
 }
-
 inline mpfr_class log10(const mpfr_class &a, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_log10(result.value, a.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_log10(rop.value, a.value, rnd);
+    return rop;
 }
 inline mpfr_class log1p(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_log1p(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_log1p(rop.value, op.value, rnd);
+    return rop;
 }
-
 inline mpfr_class log2p1(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_log2p1(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_log2p1(rop.value, op.value, rnd);
+    return rop;
 }
-
 inline mpfr_class log10p1(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_log10p1(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_log10p1(rop.value, op.value, rnd);
+    return rop;
 }
-
 inline mpfr_class exp(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_exp(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_exp(rop.value, op.value, rnd);
+    return rop;
 }
-
 inline mpfr_class exp2(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_exp2(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_exp2(rop.value, op.value, rnd);
+    return rop;
 }
-
 inline mpfr_class exp10(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_exp10(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_exp10(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class expm1(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_expm1(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_expm1(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class exp2m1(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_exp2m1(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_exp2m1(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class exp10m1(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_exp10m1(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_exp10m1(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class pow(const mpfr_class &op1, const mpfr_class &op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_pow(result.value, op1.value, op2.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_pow(rop.value, op1.value, op2.value, rnd);
+    return rop;
 }
 inline mpfr_class powr(const mpfr_class &op1, const mpfr_class &op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_powr(result.value, op1.value, op2.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_powr(rop.value, op1.value, op2.value, rnd);
+    return rop;
 }
 inline mpfr_class pow_ui(const mpfr_class &op1, unsigned long int op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_pow_ui(result.value, op1.value, op2, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_pow_ui(rop.value, op1.value, op2, rnd);
+    return rop;
 }
 inline mpfr_class pow_si(const mpfr_class &op1, long int op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_pow_si(result.value, op1.value, op2, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_pow_si(rop.value, op1.value, op2, rnd);
+    return rop;
 }
 /*
 inline mpfr_class pow_uj(const mpfr_class &op1, uintmax_t op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_pow_uj(result.value, op1.value, op2, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_pow_uj(rop.value, op1.value, op2, rnd);
+    return rop;
 }
 inline mpfr_class pow_sj(const mpfr_class &op1, intmax_t op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_pow_sj(result.value, op1.value, op2, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_pow_sj(rop.value, op1.value, op2, rnd);
+    return rop;
 }
 inline mpfr_class pown(const mpfr_class &op1, intmax_t n, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_pown(result.value, op1.value, n, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_pown(rop.value, op1.value, n, rnd);
+    return rop;
 }
 */
 inline mpfr_class pow_z(const mpfr_class &op1, const mpz_t op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_pow_z(result.value, op1.value, op2, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_pow_z(rop.value, op1.value, op2, rnd);
+    return rop;
 }
 inline mpfr_class ui_pow_ui(unsigned long int op1, unsigned long int op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_ui_pow_ui(result.value, op1, op2, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_ui_pow_ui(rop.value, op1, op2, rnd);
+    return rop;
 }
 inline mpfr_class ui_pow(unsigned long int op1, const mpfr_class &op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_ui_pow(result.value, op1, op2.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_ui_pow(rop.value, op1, op2.value, rnd);
+    return rop;
 }
 inline mpfr_class cos(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_cos(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_cos(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class sin(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_sin(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_sin(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class tan(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_tan(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_tan(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class cosu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_cosu(result.value, op.value, u, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_cosu(rop.value, op.value, u, rnd);
+    return rop;
 }
 inline mpfr_class sinu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_sinu(result.value, op.value, u, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_sinu(rop.value, op.value, u, rnd);
+    return rop;
 }
 inline mpfr_class tanu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_tanu(result.value, op.value, u, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_tanu(rop.value, op.value, u, rnd);
+    return rop;
 }
 inline mpfr_class cospi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_cospi(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_cospi(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class sinpi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_sinpi(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_sinpi(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class tanpi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_tanpi(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_tanpi(rop.value, op.value, rnd);
+    return rop;
 }
 void sin_cos(mpfr_class &sop, mpfr_class &cop, const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) { mpfr_sin_cos(sop.value, cop.value, op.value, rnd); }
 inline mpfr_class sec(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_sec(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_sec(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class csc(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_csc(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_csc(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class cot(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_cot(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_cot(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class acos(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_acos(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_acos(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class asin(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_asin(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_asin(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class acosu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_acosu(result.value, op.value, u, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_acosu(rop.value, op.value, u, rnd);
+    return rop;
 }
 inline mpfr_class asinu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_asinu(result.value, op.value, u, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_asinu(rop.value, op.value, u, rnd);
+    return rop;
 }
 inline mpfr_class atanu(const mpfr_class &op, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_atanu(result.value, op.value, u, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_atanu(rop.value, op.value, u, rnd);
+    return rop;
 }
 inline mpfr_class acospi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_acospi(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_acospi(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class asinpi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_asinpi(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_asinpi(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class atanpi(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_atanpi(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_atanpi(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class atan2(const mpfr_class &y, const mpfr_class &x, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_atan2(result.value, y.value, x.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_atan2(rop.value, y.value, x.value, rnd);
+    return rop;
 }
 inline mpfr_class atan2u(const mpfr_class &y, const mpfr_class &x, unsigned long int u, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_atan2u(result.value, y.value, x.value, u, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_atan2u(rop.value, y.value, x.value, u, rnd);
+    return rop;
 }
 inline mpfr_class atan2pi(const mpfr_class &y, const mpfr_class &x, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_atan2pi(result.value, y.value, x.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_atan2pi(rop.value, y.value, x.value, rnd);
+    return rop;
 }
 inline mpfr_class cosh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_cosh(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_cosh(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class sinh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_sinh(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_sinh(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class tanh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_tanh(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_tanh(rop.value, op.value, rnd);
+    return rop;
 }
 void sinh_cosh(mpfr_class &sop, mpfr_class &cop, const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) { mpfr_sinh_cosh(sop.value, cop.value, op.value, rnd); }
 inline mpfr_class sech(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_sech(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_sech(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class csch(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_csch(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_csch(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class coth(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_coth(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_coth(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class acosh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_acosh(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_acosh(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class asinh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_asinh(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_asinh(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class atanh(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_atanh(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_atanh(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class eint(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_eint(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_eint(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class li2(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_li2(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_li2(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class beta(const mpfr_class &op1, const mpfr_class &op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_beta(result.value, op1.value, op2.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_beta(rop.value, op1.value, op2.value, rnd);
+    return rop;
 }
 inline mpfr_class gamma(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_gamma(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_gamma(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class gamma_inc(const mpfr_class &op, const mpfr_class &op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_gamma_inc(result.value, op.value, op2.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_gamma_inc(rop.value, op.value, op2.value, rnd);
+    return rop;
 }
 inline mpfr_class lngamma(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_lngamma(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_lngamma(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class lgamma(const mpfr_class &op, int &signp, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_lgamma(result.value, &signp, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_lgamma(rop.value, &signp, op.value, rnd);
+    return rop;
 }
 inline mpfr_class digamma(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_digamma(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_digamma(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class zeta(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_zeta(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_zeta(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class zeta_ui(unsigned long int op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_zeta_ui(result.value, op, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_zeta_ui(rop.value, op, rnd);
+    return rop;
 }
 inline mpfr_class erf(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_erf(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_erf(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class erfc(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_erfc(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_erfc(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class j0(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_j0(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_j0(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class j1(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_j1(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_j1(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class jn(long int n, const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_jn(result.value, n, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_jn(rop.value, n, op.value, rnd);
+    return rop;
 }
 inline mpfr_class y0(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_y0(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_y0(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class y1(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_y1(result.value, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_y1(rop.value, op.value, rnd);
+    return rop;
 }
 inline mpfr_class yn(long int n, const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_yn(result.value, n, op.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_yn(rop.value, n, op.value, rnd);
+    return rop;
 }
 inline mpfr_class agm(const mpfr_class &op1, const mpfr_class &op2, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_agm(result.value, op1.value, op2.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_agm(rop.value, op1.value, op2.value, rnd);
+    return rop;
 }
 inline mpfr_class ai(const mpfr_class &x, mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_ai(result.value, x.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_ai(rop.value, x.value, rnd);
+    return rop;
 }
 inline mpfr_class const_log2(mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_const_log2(result.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_const_log2(rop.value, rnd);
+    return rop;
 }
 inline mpfr_class const_pi(mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_const_pi(result.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_const_pi(rop.value, rnd);
+    return rop;
 }
 inline mpfr_class const_euler(mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_const_euler(result.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_const_euler(rop.value, rnd);
+    return rop;
 }
-
 inline mpfr_class const_catalan(mpfr_rnd_t rnd = defaults::rnd) {
-    mpfr_class result;
-    mpfr_const_catalan(result.value, rnd);
-    return result;
+    mpfr_class rop;
+    mpfr_const_catalan(rop.value, rnd);
+    return rop;
 }
 
 } // namespace mpfr
+
+namespace std {
+
+template <> class numeric_limits<mpfr::mpfr_class> {
+  public:
+    static constexpr bool is_specialized = true;
+
+    static mpfr::mpfr_class min() noexcept {
+        mpfr::mpfr_class rop;
+        //        mpfr_prec_t prec = mpfr::get_default_prec(); // Get default precision or use the precision of the current context
+        //        mpfr_exp_t _min_exp = mpfr::get_emin();
+        //        mpfr_mul_2exp(rop, rop, _min_exp, MPFR_RNDN); // Scale 1 by 2^min_exp
+        return rop;
+    }
+
+    static mpfr::mpfr_class max() noexcept {
+        // Return the largest finite value, depending on the precision you've set in mpfr_class
+        mpfr::mpfr_class rop(0.0);
+        return rop;
+    }
+
+    static constexpr bool is_signed = true;
+    static constexpr bool is_integer = false;
+    static constexpr bool is_exact = false;
+    static constexpr int radix = 2; // MPFR is binary-based
+
+    static mpfr::mpfr_class epsilon() noexcept {
+        mpfr::mpfr_class rop(0.0);
+        return rop;
+    }
+
+    static mpfr::mpfr_class round_error() noexcept {
+        mpfr::mpfr_class rop(0.0);
+        return rop;
+    }
+#ifdef MAHO
+    static constexpr int min_exponent = /* appropriate value based on MPFR */;
+    static constexpr int min_exponent10 = /* appropriate value based on MPFR */;
+    static constexpr int max_exponent = /* appropriate value based on MPFR */;
+    static constexpr int max_exponent10 = /* appropriate value based on MPFR */;
+#endif
+    static constexpr bool has_infinity = true;
+    static constexpr bool has_quiet_NaN = true;
+    static constexpr bool has_signaling_NaN = true;
+    static constexpr float_denorm_style has_denorm = denorm_absent;
+    static constexpr bool has_denorm_loss = false;
+
+    static mpfr::mpfr_class infinity() noexcept {
+        mpfr::mpfr_class rop(0.0);
+        return rop;
+    }
+
+    static mpfr::mpfr_class quiet_NaN() noexcept {
+        mpfr::mpfr_class rop(0.0);
+        return rop;
+    }
+
+    static mpfr::mpfr_class signaling_NaN() noexcept {
+        mpfr::mpfr_class rop(0.0);
+        return rop;
+    }
+
+    static mpfr::mpfr_class denorm_min() noexcept {
+        mpfr::mpfr_class rop(0.0);
+        return rop;
+    }
+
+    static constexpr bool is_iec559 = false;  // MPFR does not conform to IEEE 754 entirely
+    static constexpr bool is_bounded = false; // Arbitrary precision means not truly bounded
+    static constexpr bool is_modulo = false;
+#ifdef MAHO
+    static constexpr bool traps = /* depends on mpfr_class's error handling */;
+#endif
+    static constexpr bool tinyness_before = false;
+    static constexpr float_round_style round_style = round_to_nearest; // or other rounding style supported by MPFR
+};
+
+} // namespace std
 
 mpfr_prec_t mpfr::defaults::prec;
 mpfr_rnd_t mpfr::defaults::rnd;
