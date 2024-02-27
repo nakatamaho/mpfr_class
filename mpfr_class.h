@@ -186,10 +186,34 @@ class mpfr_class {
         }
         return *this;
     }
+    // int mpfr_set (mpfr_t rop, mpfr_t op, mpfr_rnd_t rnd)
+    // int mpfr_set_ui (mpfr_t rop, unsigned long int op, mpfr_rnd_t rnd)
+    // int mpfr_set_si (mpfr_t rop, long int op, mpfr_rnd_t rnd)
+    //_int mpfr_set_uj (mpfr_t rop, uintmax_t op, mpfr_rnd_t rnd)
+    //_int mpfr_set_sj (mpfr_t rop, intmax_t op, mpfr_rnd_t rnd)
+    //_int mpfr_set_flt (mpfr_t rop, float op, mpfr_rnd_t rnd)
+    // int mpfr_set_d (mpfr_t rop, double op, mpfr_rnd_t rnd)
+    // int mpfr_set_ld (mpfr_t rop, long double op, mpfr_rnd_t rnd)
+    // int mpfr_set_float128 (mpfr_t rop, _Float128 op, mpfr_rnd_t rnd)
+    // int mpfr_set_decimal64 (mpfr_t rop, _Decimal64 op, mpfr_rnd_t rnd)
+    // int mpfr_set_decimal128 (mpfr_t rop, _Decimal128 op, mpfr_rnd_t rnd)
+    // int mpfr_set_z (mpfr_t rop, mpz_t op, mpfr_rnd_t rnd)
+    // int mpfr_set_q (mpfr_t rop, mpq_t op, mpfr_rnd_t rnd)
+    // int mpfr_set_f (mpfr_t rop, mpf_t op, mpfr_rnd_t rnd)
+    // int mpfr_set_ui_2exp (mpfr_t rop, unsigned long int op, mpfr_exp_t e, mpfr_rnd_t rnd)
+    // int mpfr_set_si_2exp (mpfr_t rop, long int op, mpfr_exp_t e, mpfr_rnd_t rnd)
+    // int mpfr_set_uj_2exp (mpfr_t rop, uintmax_t op, intmax_t e, mpfr_rnd_t rnd)
+    // int mpfr_set_sj_2exp (mpfr_t rop, intmax_t op, intmax_t e, mpfr_rnd_t rnd)
+    //_int mpfr_set_z_2exp (mpfr_t rop, mpz_t op, mpfr_exp_t e, mpfr_rnd_t rnd)
+    //_int mpfr_set_str (mpfr_t rop, const char *s, int base, mpfr_rnd_t rnd)
+    //_int mpfr_strtofr (mpfr_t rop, const char *nptr, char **endptr, int base, mpfr_rnd_t rnd)
+    // void mpfr_set_nan (mpfr_t x)
+    // void mpfr_set_inf (mpfr_t x, int sign)
+    // void mpfr_set_zero (mpfr_t x, int sign)
+    // void mpfr_swap (mpfr_t x, mpfr_t y)
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.3 Combined Initialization and Assignment Functions
     ////////////////////////////////////////////////////////////////////////////////////////
-
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.4 Conversion Functions
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -470,7 +494,6 @@ class mpfr_class {
     // int mpfr_remainder (mpfr_t r, mpfr_t x, mpfr_t y, mpfr_rnd_t rnd)
     // int mpfr_remquo (mpfr_t r, long int* q, mpfr_t x, mpfr_t y, mpfr_rnd_t rnd)
     // int mpfr_integer_p (mpfr_t op)
-
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.11 Integer and Remainder Related Functions
     ////////////////////////////////////////////////////////////////////////////////////////
