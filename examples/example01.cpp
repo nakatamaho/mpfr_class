@@ -1,4 +1,4 @@
-#include "../mpfr_class.h"
+#include "mpfr_class.h"
 #include <iostream>
 
 int main() {

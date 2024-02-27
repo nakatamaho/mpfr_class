@@ -1,6 +1,6 @@
 #include <iostream>
 #include <mpfr.h>
-#include "../mpfr_class.h"
+#include "mpfr_class.h"
 
 void calculate_and_print_kashiwagi_example(mpfr_prec_t prec) {
     mpfr::defaults::set_default_prec(prec);

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>           // For std::log2 function
-#include "../mpfr_class.h" // Include the definition of mpfr_class
+#include "mpfr_class.h" // Include the definition of mpfr_class
 
 int main() {
     // Calculate the number of bits corresponding to a precision of 50 digits

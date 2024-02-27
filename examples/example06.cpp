@@ -1,6 +1,6 @@
 #include <iostream>
 #include <mpfr.h>
-#include "../mpfr_class.h"
+#include "mpfr_class.h"
 
 void calculate_and_print_rumps_example(int prec) {
     mpfr::defaults::set_default_prec(prec);

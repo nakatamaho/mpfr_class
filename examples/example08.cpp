@@ -1,7 +1,7 @@
 // https://rosettacode.org/wiki/Pathological_floating_point_problems
 #include <iostream>
 #include <mpfr.h>
-#include "../mpfr_class.h"
+#include "mpfr_class.h"
 
 void calculate_sequence(int prec) {
     mpfr::defaults::set_default_prec(prec);

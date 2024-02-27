@@ -2,7 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include "../mpfr_class.h" // Adjust the path to the header file appropriately
+#include "mpfr_class.h" // Adjust the path to the header file appropriately
 
 int main() {
     int decimal_precision = 50;                                                         // You can change this value to adjust the precision

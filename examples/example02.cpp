@@ -1,5 +1,5 @@
 // examples/example02.cpp
-#include "../mpfr_class.h"
+#include "mpfr_class.h"
 #include <iostream>
 #include <iomanip>
 #include <mpfr.h>
