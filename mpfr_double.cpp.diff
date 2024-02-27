@@ -1,0 +1,160 @@
+diff --git a/mpfr_class.h b/mpfr_class.h
+index 3ac9c99..0d83988 100644
+--- a/mpfr_class.h
++++ b/mpfr_class.h
+@@ -284,6 +284,31 @@ class mpfr_class {
+         mpfr_div(value, value, rhs.value, defaults::rnd);
+         return *this;
+     }
++    mpfr_class &operator+=(double rhs) {
++        mpfr_add_d(this->value, this->value, rhs, defaults::rnd);
++        return *this;
++    }
++    mpfr_class &operator-=(double rhs) {
++        mpfr_sub_d(this->value, this->value, rhs, defaults::rnd);
++        return *this;
++    }
++    mpfr_class &operator*=(double rhs) {
++        mpfr_mul_d(this->value, this->value, rhs, defaults::rnd);
++        return *this;
++    }
++    mpfr_class &operator/=(double rhs) {
++        mpfr_div_d(this->value, this->value, rhs, defaults::rnd);
++        return *this;
++    }
++    friend mpfr_class operator+(const mpfr_class &lhs, const double rhs);
++    friend mpfr_class operator+(const double lhs, const mpfr_class &rhs);
++    friend mpfr_class operator-(const mpfr_class &lhs, const double rhs);
++    friend mpfr_class operator-(const double lhs, const mpfr_class &rhs);
++    friend mpfr_class operator*(const mpfr_class &lhs, const double rhs);
++    friend mpfr_class operator*(const double lhs, const mpfr_class &rhs);
++    friend mpfr_class operator/(const mpfr_class &lhs, double rhs);
++    friend mpfr_class operator/(const double lhs, const mpfr_class &rhs);
++
+     friend mpfr_class sqrt(const mpfr_class &a, mpfr_rnd_t rnd);
+     friend mpfr_class neg(const mpfr_class &a, mpfr_rnd_t rnd);
+     friend mpfr_class abs(const mpfr_class &a, mpfr_rnd_t rnd);
+@@ -550,6 +575,46 @@ std::ostream &operator<<(std::ostream &os, const mpfr_class &m) {
+ 
+     return os;
+ }
++inline mpfr_class operator+(const mpfr_class &lhs, const double rhs) {
++    mpfr_class result = lhs;
++    result += rhs;
++    return result;
++}
++inline mpfr_class operator+(const double lhs, const mpfr_class &rhs) {
++    mpfr_class result(rhs);
++    result += lhs;
++    return result;
++}
++inline mpfr_class operator-(const mpfr_class &lhs, const double rhs) {
++    mpfr_class result = lhs;
++    result -= rhs;
++    return result;
++}
++inline mpfr_class operator-(const double lhs, const mpfr_class &rhs) {
++    mpfr_class result;
++    mpfr_d_sub(result.value, lhs, rhs.value, defaults::rnd);
++    return result;
++}
++inline mpfr_class operator*(const mpfr_class &lhs, const double rhs) {
++    mpfr_class result = lhs;
++    result *= rhs;
++    return result;
++}
++inline mpfr_class operator*(const double lhs, const mpfr_class &rhs) {
++    mpfr_class result(rhs);
++    result *= lhs;
++    return result;
++}
++inline mpfr_class operator/(const mpfr_class &lhs, const double rhs) {
++    mpfr_class result = lhs;
++    result /= rhs;
++    return result;
++}
++inline mpfr_class operator/(const double lhs, const mpfr_class &rhs) {
++    mpfr_class result;
++    mpfr_d_div(result.value, lhs, rhs.value, defaults::rnd);
++    return result;
++}
+ inline mpfr_class sqrt(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
+     mpfr_class rop;
+     mpfr_sqrt(rop.value, op.get_mpfr_t(), rnd);
+diff --git a/test_mpfr_class.cpp b/test_mpfr_class.cpp
+index 2183033..fbf6c72 100644
+--- a/test_mpfr_class.cpp
++++ b/test_mpfr_class.cpp
+@@ -537,6 +537,61 @@ void testemin_emax() {
+     //    mpfr::set_emin = -1073;
+     //    mpfr::set_emax = 1024;
+ }
++void test_mpfr_class_double_addition() {
++    mpfr_class a(1.0), c;
++    const char *expectedValue = "3.0000000000";
++    double b = 2.0;
++
++    c = a + b;
++    assert(IsMpfrEquals(c, expectedValue));
++    c = b + a;
++    assert(IsMpfrEquals(c, expectedValue));
++    a += b;
++    assert(IsMpfrEquals(a, expectedValue));
++    std::cout << "mpfr_class + double test passed." << std::endl;
++}
++void test_mpfr_class_double_subtraction() {
++    mpfr_class a(5.0), c, d;
++    const char *expectedValueC = "3.0000000000";
++    const char *expectedValueD = "-3.0000000000";
++    double b = 2.0;
++
++    c = a - b;
++    assert(IsMpfrEquals(c, expectedValueC));
++    d = b - a;
++    assert(IsMpfrEquals(d, expectedValueD));
++    a -= b;
++    assert(IsMpfrEquals(a, expectedValueC));
++    std::cout << "mpfr_class - double test passed." << std::endl;
++}
++void test_mpfr_class_double_multiplication() {
++    mpfr_class a(2.0), c;
++    const char *expectedValueMul = "4.0000000000";
++    double b = 2.0;
++
++    c = a * b;
++    assert(IsMpfrEquals(c, expectedValueMul));
++    c = b * a;
++    assert(IsMpfrEquals(c, expectedValueMul));
++    a *= b;
++    assert(IsMpfrEquals(a, expectedValueMul));
++    std::cout << "mpfr_class * double test passed." << std::endl;
++}
++void test_mpfr_class_double_division() {
++    mpfr_class a(4.0), c, d;
++    const char *expectedValueDiv = "2.0000000000";
++    const char *expectedValueDivRev = "0.5000000000";
++    double b = 2.0;
++
++    c = a / b;
++    assert(IsMpfrEquals(c, expectedValueDiv));
++    d = b / a;
++    assert(IsMpfrEquals(d, expectedValueDivRev));
++    a /= b;
++    assert(IsMpfrEquals(a, expectedValueDiv));
++    std::cout << "mpfr_class / double test passed." << std::endl;
++}
++
+ int main() {
+     ////////////////////////////////////////////////////////////////////////////////////////
+     // 5.1 Initialization Functions
+@@ -563,6 +618,10 @@ int main() {
+     testSqrt();
+     testNeg();
+     testAbs();
++    test_mpfr_class_double_addition();
++    test_mpfr_class_double_subtraction();
++    test_mpfr_class_double_multiplication();
++    test_mpfr_class_double_division();
+     ////////////////////////////////////////////////////////////////////////////////////////
+     // 5.6 Comparison Functions
+     ////////////////////////////////////////////////////////////////////////////////////////

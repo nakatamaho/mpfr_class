@@ -537,6 +537,61 @@ void testemin_emax() {
     //    mpfr::set_emin = -1073;
     //    mpfr::set_emax = 1024;
 }
+void test_mpfr_class_double_addition() {
+    mpfr_class a(1.0), c;
+    const char *expectedValue = "3.0000000000";
+    double b = 2.0;
+
+    c = a + b;
+    assert(IsMpfrEquals(c, expectedValue));
+    c = b + a;
+    assert(IsMpfrEquals(c, expectedValue));
+    a += b;
+    assert(IsMpfrEquals(a, expectedValue));
+    std::cout << "mpfr_class + double test passed." << std::endl;
+}
+void test_mpfr_class_double_subtraction() {
+    mpfr_class a(5.0), c, d;
+    const char *expectedValueC = "3.0000000000";
+    const char *expectedValueD = "-3.0000000000";
+    double b = 2.0;
+
+    c = a - b;
+    assert(IsMpfrEquals(c, expectedValueC));
+    d = b - a;
+    assert(IsMpfrEquals(d, expectedValueD));
+    a -= b;
+    assert(IsMpfrEquals(a, expectedValueC));
+    std::cout << "mpfr_class - double test passed." << std::endl;
+}
+void test_mpfr_class_double_multiplication() {
+    mpfr_class a(2.0), c;
+    const char *expectedValueMul = "4.0000000000";
+    double b = 2.0;
+
+    c = a * b;
+    assert(IsMpfrEquals(c, expectedValueMul));
+    c = b * a;
+    assert(IsMpfrEquals(c, expectedValueMul));
+    a *= b;
+    assert(IsMpfrEquals(a, expectedValueMul));
+    std::cout << "mpfr_class * double test passed." << std::endl;
+}
+void test_mpfr_class_double_division() {
+    mpfr_class a(4.0), c, d;
+    const char *expectedValueDiv = "2.0000000000";
+    const char *expectedValueDivRev = "0.5000000000";
+    double b = 2.0;
+
+    c = a / b;
+    assert(IsMpfrEquals(c, expectedValueDiv));
+    d = b / a;
+    assert(IsMpfrEquals(d, expectedValueDivRev));
+    a /= b;
+    assert(IsMpfrEquals(a, expectedValueDiv));
+    std::cout << "mpfr_class / double test passed." << std::endl;
+}
+
 int main() {
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.1 Initialization Functions
@@ -563,6 +618,10 @@ int main() {
     testSqrt();
     testNeg();
     testAbs();
+    test_mpfr_class_double_addition();
+    test_mpfr_class_double_subtraction();
+    test_mpfr_class_double_multiplication();
+    test_mpfr_class_double_division();
     ////////////////////////////////////////////////////////////////////////////////////////
     // 5.6 Comparison Functions
     ////////////////////////////////////////////////////////////////////////////////////////

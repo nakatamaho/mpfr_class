@@ -284,6 +284,31 @@ class mpfr_class {
         mpfr_div(value, value, rhs.value, defaults::rnd);
         return *this;
     }
+    mpfr_class &operator+=(double rhs) {
+        mpfr_add_d(this->value, this->value, rhs, defaults::rnd);
+        return *this;
+    }
+    mpfr_class &operator-=(double rhs) {
+        mpfr_sub_d(this->value, this->value, rhs, defaults::rnd);
+        return *this;
+    }
+    mpfr_class &operator*=(double rhs) {
+        mpfr_mul_d(this->value, this->value, rhs, defaults::rnd);
+        return *this;
+    }
+    mpfr_class &operator/=(double rhs) {
+        mpfr_div_d(this->value, this->value, rhs, defaults::rnd);
+        return *this;
+    }
+    friend mpfr_class operator+(const mpfr_class &lhs, const double rhs);
+    friend mpfr_class operator+(const double lhs, const mpfr_class &rhs);
+    friend mpfr_class operator-(const mpfr_class &lhs, const double rhs);
+    friend mpfr_class operator-(const double lhs, const mpfr_class &rhs);
+    friend mpfr_class operator*(const mpfr_class &lhs, const double rhs);
+    friend mpfr_class operator*(const double lhs, const mpfr_class &rhs);
+    friend mpfr_class operator/(const mpfr_class &lhs, double rhs);
+    friend mpfr_class operator/(const double lhs, const mpfr_class &rhs);
+
     friend mpfr_class sqrt(const mpfr_class &a, mpfr_rnd_t rnd);
     friend mpfr_class neg(const mpfr_class &a, mpfr_rnd_t rnd);
     friend mpfr_class abs(const mpfr_class &a, mpfr_rnd_t rnd);
@@ -549,6 +574,46 @@ std::ostream &operator<<(std::ostream &os, const mpfr_class &m) {
     mpfr_free_str(str);
 
     return os;
+}
+inline mpfr_class operator+(const mpfr_class &lhs, const double rhs) {
+    mpfr_class result = lhs;
+    result += rhs;
+    return result;
+}
+inline mpfr_class operator+(const double lhs, const mpfr_class &rhs) {
+    mpfr_class result(rhs);
+    result += lhs;
+    return result;
+}
+inline mpfr_class operator-(const mpfr_class &lhs, const double rhs) {
+    mpfr_class result = lhs;
+    result -= rhs;
+    return result;
+}
+inline mpfr_class operator-(const double lhs, const mpfr_class &rhs) {
+    mpfr_class result;
+    mpfr_d_sub(result.value, lhs, rhs.value, defaults::rnd);
+    return result;
+}
+inline mpfr_class operator*(const mpfr_class &lhs, const double rhs) {
+    mpfr_class result = lhs;
+    result *= rhs;
+    return result;
+}
+inline mpfr_class operator*(const double lhs, const mpfr_class &rhs) {
+    mpfr_class result(rhs);
+    result *= lhs;
+    return result;
+}
+inline mpfr_class operator/(const mpfr_class &lhs, const double rhs) {
+    mpfr_class result = lhs;
+    result /= rhs;
+    return result;
+}
+inline mpfr_class operator/(const double lhs, const mpfr_class &rhs) {
+    mpfr_class result;
+    mpfr_d_div(result.value, lhs, rhs.value, defaults::rnd);
+    return result;
 }
 inline mpfr_class sqrt(const mpfr_class &op, mpfr_rnd_t rnd = defaults::rnd) {
     mpfr_class rop;
