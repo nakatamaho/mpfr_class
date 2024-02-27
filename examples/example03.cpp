@@ -1,7 +1,7 @@
 // calculation of e
 #include <iostream>
 #include <iomanip>
-#include <cmath>           // For std::log2 function
+#include <cmath>        // For std::log2 function
 #include "mpfr_class.h" // Include the definition of mpfr_class
 
 int main() {

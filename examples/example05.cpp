@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <iomanip>
-#include <cmath>           // For std::pow function
+#include <cmath>        // For std::pow function
 #include "mpfr_class.h" // Set the correct path to the mpfr_class definition header
 
 int main() {
