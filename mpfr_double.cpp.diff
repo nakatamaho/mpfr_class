@@ -95,11 +95,11 @@ index 2183033..fbf6c72 100644
 +    double b = 2.0;
 +
 +    c = a + b;
-+    assert(IsMpfrEquals(c, expectedValue));
++    assert(IsMPFREquals(c, expectedValue));
 +    c = b + a;
-+    assert(IsMpfrEquals(c, expectedValue));
++    assert(IsMPFREquals(c, expectedValue));
 +    a += b;
-+    assert(IsMpfrEquals(a, expectedValue));
++    assert(IsMPFREquals(a, expectedValue));
 +    std::cout << "mpfr_class + double test passed." << std::endl;
 +}
 +void test_mpfr_class_double_subtraction() {
@@ -109,11 +109,11 @@ index 2183033..fbf6c72 100644
 +    double b = 2.0;
 +
 +    c = a - b;
-+    assert(IsMpfrEquals(c, expectedValueC));
++    assert(IsMPFREquals(c, expectedValueC));
 +    d = b - a;
-+    assert(IsMpfrEquals(d, expectedValueD));
++    assert(IsMPFREquals(d, expectedValueD));
 +    a -= b;
-+    assert(IsMpfrEquals(a, expectedValueC));
++    assert(IsMPFREquals(a, expectedValueC));
 +    std::cout << "mpfr_class - double test passed." << std::endl;
 +}
 +void test_mpfr_class_double_multiplication() {
@@ -122,11 +122,11 @@ index 2183033..fbf6c72 100644
 +    double b = 2.0;
 +
 +    c = a * b;
-+    assert(IsMpfrEquals(c, expectedValueMul));
++    assert(IsMPFREquals(c, expectedValueMul));
 +    c = b * a;
-+    assert(IsMpfrEquals(c, expectedValueMul));
++    assert(IsMPFREquals(c, expectedValueMul));
 +    a *= b;
-+    assert(IsMpfrEquals(a, expectedValueMul));
++    assert(IsMPFREquals(a, expectedValueMul));
 +    std::cout << "mpfr_class * double test passed." << std::endl;
 +}
 +void test_mpfr_class_double_division() {
@@ -136,11 +136,11 @@ index 2183033..fbf6c72 100644
 +    double b = 2.0;
 +
 +    c = a / b;
-+    assert(IsMpfrEquals(c, expectedValueDiv));
++    assert(IsMPFREquals(c, expectedValueDiv));
 +    d = b / a;
-+    assert(IsMpfrEquals(d, expectedValueDivRev));
++    assert(IsMPFREquals(d, expectedValueDivRev));
 +    a /= b;
-+    assert(IsMpfrEquals(a, expectedValueDiv));
++    assert(IsMPFREquals(a, expectedValueDiv));
 +    std::cout << "mpfr_class / double test passed." << std::endl;
 +}
 +

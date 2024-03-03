@@ -37,7 +37,7 @@
 using namespace mpfr;
 
 // Asserts that the mpfr_class object equals the expected string representation
-bool IsMpfrEquals(mpfr_class &mpfrObj, const char *expected, int base = defaults::base, int precision = 10) {
+bool IsMPFREquals(mpfr_class &mpfrObj, const char *expected, int base = defaults::base, int precision = 10) {
     char formatString[64];
     char buffer[64];
 
@@ -120,12 +120,12 @@ void testInitializationAndAssignmentDouble() {
     const char *expectedValue = "3.1415926535";
 
     mpfr_class a = (mpfr_class)testValue;
-    assert(IsMpfrEquals(a, expectedValue));
+    assert(IsMPFREquals(a, expectedValue));
     std::cout << "Substitution from double using constructor test passed." << std::endl;
 
     mpfr_class b;
     b = testValue;
-    assert(IsMpfrEquals(b, expectedValue));
+    assert(IsMPFREquals(b, expectedValue));
     std::cout << "Substitution from double using assignment test passed." << std::endl;
 }
 
@@ -133,52 +133,52 @@ void testInitializationAndAssignmentString() {
     // Testing initialization with a decimal number using a constructor
     const char *expectedDecimalValue = "1.4142135624";
     mpfr_class a = expectedDecimalValue;
-    assert(IsMpfrEquals(a, expectedDecimalValue));
+    assert(IsMPFREquals(a, expectedDecimalValue));
     std::cout << "Constructor initialization with decimal '" << expectedDecimalValue << "' test passed." << std::endl;
 
     // Testing initialization with a decimal number using an assignment operator
     mpfr_class b;
     b = expectedDecimalValue;
-    assert(IsMpfrEquals(b, expectedDecimalValue));
+    assert(IsMPFREquals(b, expectedDecimalValue));
     std::cout << "Assignment initialization with decimal '" << expectedDecimalValue << "' test passed." << std::endl;
 
     // Testing initialization with a decimal number using a constructor
     std::string expectedDecimalValueString = "3.1415926535";
     mpfr_class c = expectedDecimalValueString;
-    assert(IsMpfrEquals(c, expectedDecimalValueString.c_str()));
+    assert(IsMPFREquals(c, expectedDecimalValueString.c_str()));
     std::cout << "Constructor initialization with decimal '" << expectedDecimalValueString << "' test passed." << std::endl;
 
     // Testing initialization with a decimal number using an assignment operator
     mpfr_class d;
     d = expectedDecimalValueString;
-    assert(IsMpfrEquals(d, expectedDecimalValueString.c_str()));
+    assert(IsMPFREquals(d, expectedDecimalValueString.c_str()));
     std::cout << "Assignment initialization with decimal '" << expectedDecimalValueString << "' test passed." << std::endl;
 
     // Testing initialization with a hexadecimal number using an assignment operator
     const char *expectedHexValue = "0x3.243f6a8885a3p+0";
     mpfr_class e(expectedHexValue, 16);
-    assert(IsMpfrEquals(e, expectedHexValue, 16, 12));
+    assert(IsMPFREquals(e, expectedHexValue, 16, 12));
     std::cout << "Assignment initialization with hexadecimal '" << expectedHexValue << "' test passed." << std::endl;
 
     defaults::base = 16;
     // Testing initialization with a hexadecimal number using a constructor
     mpfr_class f;
     e = expectedHexValue;
-    assert(IsMpfrEquals(e, expectedHexValue, defaults::base, 12));
+    assert(IsMPFREquals(e, expectedHexValue, defaults::base, 12));
     std::cout << "Constructor initialization with hexadecimal '" << expectedHexValue << "' test passed." << std::endl;
     defaults::base = 10;
 
     // Testing initialization with a hexadecimal number using an assignment operator
     const char *expectedBinaryValue = "1.0101010001000100010001011010001000100010001011p+1";
     mpfr_class g(expectedBinaryValue, 2);
-    assert(IsMpfrEquals(g, expectedBinaryValue, 2, 46));
+    assert(IsMPFREquals(g, expectedBinaryValue, 2, 46));
     std::cout << "Assignment initialization with binary '" << expectedBinaryValue << "' test passed." << std::endl;
 
     defaults::base = 2;
     // Testing initialization with a binaryadecimal number using a constructor
     mpfr_class h;
     h = expectedBinaryValue;
-    assert(IsMpfrEquals(h, expectedBinaryValue, defaults::base, 46));
+    assert(IsMPFREquals(h, expectedBinaryValue, defaults::base, 46));
     std::cout << "Constructor initialization with binary '" << expectedBinaryValue << "' test passed." << std::endl;
     defaults::base = 10;
 }
@@ -207,13 +207,13 @@ void testSqrt() {
     a = "4.0"; // Square root of 4.0 is 2.0
     mpfr_class result = sqrt(a);
     std::string expected = "2.0000000000";
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     // Test Case 2: Calculate the square root of 0
     mpfr_class b("0.0"); // Square root of 0.0 is 0.0
     result = sqrt(b);
     expected = "0.0000000000";
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     // Test Case 3: Calculate the square root of a negative number (should raise an error)
     mpfr_class c("-1.0");
@@ -242,12 +242,12 @@ void testLog() {
     mpfr_class result = log(a);
     // log(1) = 0
     std::string expected = "0.0000000000";
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
     // log(2) = 0.69314718056
     a = "2.0";
     expected = "0.6931471806";
     result = log(a);
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     a = "0.0";
     result = log(a);
@@ -266,12 +266,12 @@ void testLog10() {
     mpfr_class result = log10(a);
     // log10(10) = 1
     std::string expected = "1.0000000000";
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
     // log(2) = 0.3010299957
     a = "2.0";
     expected = "0.3010299957";
     result = log10(a);
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     a = "0.0";
     result = log10(a);
@@ -290,12 +290,12 @@ void testLog2() {
     mpfr_class result = log2(a);
     // log2(2) = 1
     std::string expected = "1.0000000000";
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
     // log2(10) = 3.3219280949
     a = "10.0";
     expected = "3.3219280949";
     result = log2(a);
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     a = "0.0";
     result = log2(a);
@@ -314,12 +314,12 @@ void testLog1p() {
     mpfr_class a("0.5");
     mpfr_class result = log1p(a);
     std::string expected = "0.4054651081"; // Approximate value for log1p(0.5)
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     a = "-0.5";
     result = log1p(a);
     expected = "-0.6931471806"; // Approximate value for log1p(-0.5)
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     std::cout << "Log1p tests passed." << std::endl;
 }
@@ -329,7 +329,7 @@ void testLog2p1() {
     mpfr_class a("1.0");
     mpfr_class result = log2p1(a);
     std::string expected = "1.0000000000"; // Exact value for log2p1(1)
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
     std::cout << "Log2p1 tests passed." << std::endl;
 }
 
@@ -338,7 +338,7 @@ void testLog10p1() {
     mpfr_class a("9.0");
     mpfr_class result = log10p1(a);
     std::string expected = "1.0000000000"; // Exact value for log10p1(9)
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
     std::cout << "Log10p1 tests passed." << std::endl;
 }
 
@@ -347,7 +347,7 @@ void testExp() {
     mpfr_class a("1.0");
     mpfr_class result = exp(a);
     std::string expected = "2.7182818285"; // Approximate value for e
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     std::cout << "Exp tests passed." << std::endl;
 }
@@ -357,7 +357,7 @@ void testExp2() {
     mpfr_class a("4.0");
     mpfr_class result = exp2(a);
     std::string expected = "16.0000000000"; // Exact value for 2^4
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     std::cout << "Exp2 tests passed." << std::endl;
 }
@@ -367,7 +367,7 @@ void testExp10() {
     mpfr_class a("2.0");
     mpfr_class result = exp10(a);
     std::string expected = "100.0000000000"; // Exact value for 10^2
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     std::cout << "Exp10 tests passed." << std::endl;
 }
@@ -376,7 +376,7 @@ void testExp10() {
 void testConstLog2() {
     mpfr_class result = const_log2(MPFR_RNDN);
     std::string expected = "0.6931471806"; // Approximate value for log(2)
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     std::cout << "Const_log2 tests passed." << std::endl;
 }
@@ -385,7 +385,7 @@ void testConstLog2() {
 void testConstPi() {
     mpfr_class result = const_pi(MPFR_RNDN);
     std::string expected = "3.1415926536"; // Approximate value for pi
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     std::cout << "Const_pi tests passed." << std::endl;
 }
@@ -394,7 +394,7 @@ void testConstPi() {
 void testConstEuler() {
     mpfr_class result = const_euler(MPFR_RNDN);
     std::string expected = "0.5772156649"; // Approximate value for Euler's constant
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     std::cout << "Const_euler tests passed." << std::endl;
 }
@@ -403,7 +403,7 @@ void testConstEuler() {
 void testConstCatalan() {
     mpfr_class result = const_catalan(MPFR_RNDN);
     std::string expected = "0.9159655942"; // Approximate value for Catalan's constant
-    assert(IsMpfrEquals(result, expected.c_str()));
+    assert(IsMPFREquals(result, expected.c_str()));
 
     std::cout << "Const_catalan tests passed." << std::endl;
 }
@@ -414,9 +414,9 @@ void testAddition() {
     std::string expected = "4.0000000000";
 
     mpfr_class c = a + b;
-    assert(IsMpfrEquals(c, expected.c_str()));
+    assert(IsMPFREquals(c, expected.c_str()));
     a += b;
-    assert(IsMpfrEquals(a, expected.c_str()));
+    assert(IsMPFREquals(a, expected.c_str()));
     std::cout << "Addition Test passed." << std::endl;
 }
 
@@ -426,9 +426,9 @@ void testMultplication() {
     std::string expected = "6.0000000000";
 
     mpfr_class c = a * b;
-    assert(IsMpfrEquals(c, expected.c_str()));
+    assert(IsMPFREquals(c, expected.c_str()));
     a *= b;
-    assert(IsMpfrEquals(a, expected.c_str()));
+    assert(IsMPFREquals(a, expected.c_str()));
     std::cout << "Multiplication Test passed." << std::endl;
 }
 
@@ -438,9 +438,9 @@ void testDivision() {
     std::string expected = "3.0000000000";
 
     mpfr_class c = a / b;
-    assert(IsMpfrEquals(c, expected.c_str()));
+    assert(IsMPFREquals(c, expected.c_str()));
     a /= b;
-    assert(IsMpfrEquals(a, expected.c_str()));
+    assert(IsMPFREquals(a, expected.c_str()));
     std::cout << "Division Test passed." << std::endl;
 }
 void testSubtraction() {
@@ -449,9 +449,9 @@ void testSubtraction() {
     std::string expected = "3.0000000000";
 
     mpfr_class c = a - b;
-    assert(IsMpfrEquals(c, expected.c_str()));
+    assert(IsMPFREquals(c, expected.c_str()));
     a -= b;
-    assert(IsMpfrEquals(a, expected.c_str()));
+    assert(IsMPFREquals(a, expected.c_str()));
     std::cout << "Subtraction Test passed." << std::endl;
 }
 
@@ -543,11 +543,12 @@ void test_mpfr_class_double_addition() {
     double b = 2.0;
 
     c = a + b;
-    assert(IsMpfrEquals(c, expectedValue));
+    assert(IsMPFREquals(c, expectedValue));
     c = b + a;
-    assert(IsMpfrEquals(c, expectedValue));
+    assert(IsMPFREquals(c, expectedValue));
     a += b;
-    assert(IsMpfrEquals(a, expectedValue));
+    assert(IsMPFREquals(a, expectedValue));
+    c = 1.0 + b;
     std::cout << "mpfr_class + double test passed." << std::endl;
 }
 void test_mpfr_class_double_subtraction() {
@@ -557,11 +558,11 @@ void test_mpfr_class_double_subtraction() {
     double b = 2.0;
 
     c = a - b;
-    assert(IsMpfrEquals(c, expectedValueC));
+    assert(IsMPFREquals(c, expectedValueC));
     d = b - a;
-    assert(IsMpfrEquals(d, expectedValueD));
+    assert(IsMPFREquals(d, expectedValueD));
     a -= b;
-    assert(IsMpfrEquals(a, expectedValueC));
+    assert(IsMPFREquals(a, expectedValueC));
     std::cout << "mpfr_class - double test passed." << std::endl;
 }
 void test_mpfr_class_double_multiplication() {
@@ -570,11 +571,11 @@ void test_mpfr_class_double_multiplication() {
     double b = 2.0;
 
     c = a * b;
-    assert(IsMpfrEquals(c, expectedValueMul));
+    assert(IsMPFREquals(c, expectedValueMul));
     c = b * a;
-    assert(IsMpfrEquals(c, expectedValueMul));
+    assert(IsMPFREquals(c, expectedValueMul));
     a *= b;
-    assert(IsMpfrEquals(a, expectedValueMul));
+    assert(IsMPFREquals(a, expectedValueMul));
     std::cout << "mpfr_class * double test passed." << std::endl;
 }
 void test_mpfr_class_double_division() {
@@ -584,11 +585,11 @@ void test_mpfr_class_double_division() {
     double b = 2.0;
 
     c = a / b;
-    assert(IsMpfrEquals(c, expectedValueDiv));
+    assert(IsMPFREquals(c, expectedValueDiv));
     d = b / a;
-    assert(IsMpfrEquals(d, expectedValueDivRev));
+    assert(IsMPFREquals(d, expectedValueDivRev));
     a /= b;
-    assert(IsMpfrEquals(a, expectedValueDiv));
+    assert(IsMPFREquals(a, expectedValueDiv));
     std::cout << "mpfr_class / double test passed." << std::endl;
 }
 
