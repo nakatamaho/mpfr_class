@@ -44,7 +44,7 @@ bool IsMPFREquals(mpfr_class &mpfrObj, const char *expected, int base = defaults
     // Adjust the comparison based on the base
     switch (base) {
     case 2:
-        std::sprintf(formatString, "%%.%dRb", precision);         // Generates format string like "%.10Rf"
+        std::sprintf(formatString, "%%.%dRb", precision);         // Generates format string like "%.10Rb"
         mpfr_sprintf(buffer, formatString, mpfrObj.get_mpfr_t()); // Uses generated format string
         break;
     case 10:
@@ -53,7 +53,7 @@ bool IsMPFREquals(mpfr_class &mpfrObj, const char *expected, int base = defaults
         break;
 
     case 16:
-        std::sprintf(formatString, "%%.%dRa", precision);         // Generates format string like "%.10Rf"
+        std::sprintf(formatString, "%%.%dRa", precision);         // Generates format string like "%.10Ra"
         mpfr_sprintf(buffer, formatString, mpfrObj.get_mpfr_t()); // Uses generated format string
         break;
 
