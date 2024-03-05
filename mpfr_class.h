@@ -576,7 +576,7 @@ std::ostream &operator<<(std::ostream &os, const mpfr_class &m) {
     return os;
 }
 inline mpfr_class operator+(const mpfr_class &lhs, const double rhs) {
-    mpfr_class result = lhs;
+    mpfr_class result(lhs);
     result += rhs;
     return result;
 }
@@ -586,7 +586,7 @@ inline mpfr_class operator+(const double lhs, const mpfr_class &rhs) {
     return result;
 }
 inline mpfr_class operator-(const mpfr_class &lhs, const double rhs) {
-    mpfr_class result = lhs;
+    mpfr_class result(lhs);
     result -= rhs;
     return result;
 }
@@ -596,7 +596,7 @@ inline mpfr_class operator-(const double lhs, const mpfr_class &rhs) {
     return result;
 }
 inline mpfr_class operator*(const mpfr_class &lhs, const double rhs) {
-    mpfr_class result = lhs;
+    mpfr_class result(lhs);
     result *= rhs;
     return result;
 }
@@ -606,7 +606,7 @@ inline mpfr_class operator*(const double lhs, const mpfr_class &rhs) {
     return result;
 }
 inline mpfr_class operator/(const mpfr_class &lhs, const double rhs) {
-    mpfr_class result = lhs;
+    mpfr_class result(lhs);
     result /= rhs;
     return result;
 }
