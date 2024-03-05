@@ -37,7 +37,7 @@
 #include <utility>
 #include <limits>
 
-#define ___MPFR_CLASS_EXPLICIT___  explicit
+#define ___MPFR_CLASS_EXPLICIT___ explicit
 
 namespace mpfr {
 
